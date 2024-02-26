@@ -96,6 +96,7 @@ private  RoleService roleService;
         newUser.setActive(true);
         newUser.setNom(authRequestDto.getNom());
         newUser.setPrenom(authRequestDto.getPrenom());
+        newUser.setPhoto(authRequestDto.getPhoto());
         newUser.setDateDeNaissance(authRequestDto.getDateDeNaissance());
         newUser.setEntreprise(authRequestDto.getEntreprise());
         newUser.setAdresse(authRequestDto.getAdresse());

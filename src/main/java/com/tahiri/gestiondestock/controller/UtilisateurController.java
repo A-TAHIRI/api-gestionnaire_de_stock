@@ -127,7 +127,7 @@ public class UtilisateurController {
 
     }
 */
-    @PostMapping("/update/password")
+    @PutMapping("/update/password")
     Utilisateur changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto){
         return utilisateurService.changerMotDePasse(dto)  ;
     }

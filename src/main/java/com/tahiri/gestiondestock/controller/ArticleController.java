@@ -36,23 +36,7 @@ public class ArticleController {
     }
 
 
- /*   @GetMapping("/toto")
-    public ResponseEntity< List<ArticleDto> > gettoto(){
 
-        for (Article a: articles){
-            List<Article> articles = articleService.getAll();
-            List<ArticleDto> articleDtos = new ArrayList<>();
-            articleDtos.add(new ArticleDto(a));
-        }
-        try {
-
-            return ResponseEntity.ok(articleDtos);
-
-        }catch (WsException e){
-            return ResponseEntity.status(e.getStatusCode())
-                    .body(e.getCause());
-        }
-    }*/
     /**
      * method pour recupirer un article
      * @param id

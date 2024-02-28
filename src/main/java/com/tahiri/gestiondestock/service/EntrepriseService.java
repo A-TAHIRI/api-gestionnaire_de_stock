@@ -65,6 +65,7 @@ public class EntrepriseService {
           utilisateur.setPrenom(entreprise.getCodeFiscal());
           utilisateur.setDateDeNaissance(new Date());
           utilisateur.setMdp(generateRandomPassword());
+          utilisateur.setNumTel(entreprise.getNumTel());
           utilisateur.setRoles(List.of(roleService.addRole("ADMIN")));
           utilisateur.setActive(true);
           utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService));

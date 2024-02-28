@@ -42,7 +42,7 @@ public class UtilisateurService{
                 utilisateurRepository.save(utilisateur);
     }
 
-    private boolean userAlreadyExists(String email) {
+    public boolean userAlreadyExists(String email) {
         Optional<Utilisateur> user = utilisateurRepository.findByEmail(email);
         return user.isPresent();
     }

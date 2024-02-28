@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthRequestDto {
+    private  Integer id;
     private  String nom;
     private  String prenom;
     private Adresse adresse;

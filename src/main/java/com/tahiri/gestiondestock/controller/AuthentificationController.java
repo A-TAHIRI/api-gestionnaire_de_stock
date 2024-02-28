@@ -90,24 +90,25 @@ private  RoleService roleService;
         // l'ensemble des vérif => nom > 3 caract le mdp sup à 8 caract avec du majuscule ou minuscule
 
 
-        Utilisateur newUser = new Utilisateur();
-        newUser.setEmail(authRequestDto.getEmail());
-        newUser.setMdp(authRequestDto.getMdp());
-        newUser.setActive(true);
-        newUser.setNom(authRequestDto.getNom());
-        newUser.setPrenom(authRequestDto.getPrenom());
-        newUser.setPhoto(authRequestDto.getPhoto());
-        newUser.setDateDeNaissance(authRequestDto.getDateDeNaissance());
-        newUser.setEntreprise(authRequestDto.getEntreprise());
-        newUser.setAdresse(authRequestDto.getAdresse());
-        newUser.setRoles( List.of(roleService.addRole("USER"))) ;
-        newUser.setToken(TokenManager.generateToken(applicationUserDetailService));
-        utilisateurService.save(newUser);
+            Utilisateur newUser = new Utilisateur();
+            newUser.setEmail(authRequestDto.getEmail());
+            newUser.setMdp(authRequestDto.getMdp());
+            newUser.setActive(true);
+            newUser.setNom(authRequestDto.getNom());
+            newUser.setPrenom(authRequestDto.getPrenom());
+            newUser.setPhoto(authRequestDto.getPhoto());
+            newUser.setDateDeNaissance(authRequestDto.getDateDeNaissance());
+            newUser.setEntreprise(authRequestDto.getEntreprise());
+            newUser.setAdresse(authRequestDto.getAdresse());
+            newUser.setRoles( List.of(roleService.addRole("USER"))) ;
+            newUser.setToken(TokenManager.generateToken(applicationUserDetailService));
+            utilisateurService.save(newUser);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token",  JwtsTokenGenerate.generateToken(newUser.getToken()));
+            Map<String, String> response = new HashMap<>();
+            response.put("token",  JwtsTokenGenerate.generateToken(newUser.getToken()));
 
-        return response;
+            return response;
+
 
 
 

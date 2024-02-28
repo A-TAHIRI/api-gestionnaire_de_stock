@@ -33,6 +33,8 @@ public class ClientDto {
     public ClientDto (Client client) {
         this.id=client.getId();
         this.nom=client.getNom();
+        this.email=client.getEmail();
+        this.numTel= client.getNumTel();
         this.prenom=client.getPrenom();
         this.adresse= new AdresseDto(client.getAdresse());
         this.photo= client.getPhoto();

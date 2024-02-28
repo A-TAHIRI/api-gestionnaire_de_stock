@@ -58,6 +58,11 @@ public class UtilisateurController {
         return new UtilisateurDto(utilisateurService.getById(id));
     }
 
+    /**
+     *
+     * @param email
+     * @return
+     */
     @GetMapping("/email/{email}")
     public UtilisateurDto utilisateurByEmail(@PathVariable String email){
         return  new UtilisateurDto(utilisateurService.getByEmail(email)) ;

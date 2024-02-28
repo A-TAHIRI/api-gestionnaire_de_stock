@@ -36,10 +36,7 @@ public class UtilisateurService{
             throw new InvalidEntityException("L'utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
 
-        if(userAlreadyExists(utilisateur.getEmail())) {
-            throw new InvalidEntityException("Un autre utilisateur avec le meme email existe deja", ErrorCodes.UTILISATEUR_ALREADY_EXISTS,
-                    Collections.singletonList("Un autre utilisateur avec le meme email existe deja dans la BDD"));
-        }
+
        utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
         return
                 utilisateurRepository.save(utilisateur);

@@ -2,7 +2,11 @@ package com.tahiri.gestiondestock.controller;
 
 
 import com.tahiri.gestiondestock.dto.CommandeClientDto;
+import com.tahiri.gestiondestock.dto.LigneCommadeClientDto;
+import com.tahiri.gestiondestock.dto.LigneCommadeFournisseurDto;
 import com.tahiri.gestiondestock.model.CommandeClient;
+import com.tahiri.gestiondestock.model.LigneCommadeClient;
+import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import com.tahiri.gestiondestock.service.CommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -83,4 +87,16 @@ public class CommandeClientController {
         }
         return  new  CommandeClientDto(commandeClientService.save(commandeClient));
     }
+
+    @GetMapping( "/lignesCommande/{idCommande}")
+    List<LigneCommadeClientDto> findAllLignesCommandesClientByCommandeFournisseurId(@PathVariable("idCommande") Integer idCommande){
+        List <LigneCommadeClient> liste =  commandeClientService.findAllLignesCommandesByCommandeClient(idCommande);
+        List<LigneCommadeClientDto> dtoList= new ArrayList<>();
+        for (LigneCommadeClient lig : liste){
+            dtoList.add(new LigneCommadeClientDto(lig));
+
+        }
+        return dtoList;
+    };
+
 }

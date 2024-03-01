@@ -86,6 +86,10 @@ public class ArticleController {
         }
     }
 
+    @GetMapping("/filter/{codeArticle}")
+   public ArticleDto getArticleByCode(@PathVariable String codeArticle){
+        return new ArticleDto(articleService.finByCodeArticle(codeArticle)) ;
+    }
 
 
 }

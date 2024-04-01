@@ -15,5 +15,6 @@ public interface constant {
 
     String COMMANDE_CLIENT_ENDPOINT= APP_ROOT+"/commadeClients";
     String COMMADE_FOURNISSEUR_ENDPOINT= APP_ROOT+"/commandFournisseurs";
+    String MVTSTK_ENOINT =APP_ROOT+"/mvtstk";
 
 }

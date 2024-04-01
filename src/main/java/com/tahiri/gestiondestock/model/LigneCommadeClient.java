@@ -20,7 +20,6 @@ public class LigneCommadeClient extends AbstractEntity {
     @Column(name = "quantite")
     private BigDecimal quantite;
 
-
     @Column(name = "prixUnitaire")
     private double prixUnitaire;
 

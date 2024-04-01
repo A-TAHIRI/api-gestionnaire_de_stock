@@ -84,11 +84,11 @@ public class CommandeClientService {
         commandeClient.setDateCommande(Instant.now());
         CommandeClient saveCmdClt = commandeClientRepository.save(commandeClient);
         if (commandeClient.getLigneCommadeClients() != null) {
+
             commandeClient.getLigneCommadeClients().forEach(ligCmdClt->{
                 LigneCommadeClient ligneCommadeClient = ligneCommandeClientRepository.save(ligCmdClt);
                 ligneCommadeClient.setCommandeClient(saveCmdClt);
-                ligneCommadeClient.setIdEntreprise(commandeClient.getIdEntreprise());
-
+                ligneCommadeClient.setIdEntreprise(saveCmdClt.getIdEntreprise());
                 LigneCommadeClient savedLigneCmd = ligneCommandeClientRepository.save(ligneCommadeClient);
                 effectuerSortie(savedLigneCmd);
 
@@ -98,7 +98,7 @@ public class CommandeClientService {
         }
 
 
-        return commandeClientRepository.save(commandeClient);
+        return commandeClientRepository.save(saveCmdClt);
 }
 
 

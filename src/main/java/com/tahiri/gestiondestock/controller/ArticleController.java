@@ -16,7 +16,7 @@ import static com.tahiri.gestiondestock.utils.constant.ARTICLE_ENDPOINT;
 
 @RestController
 @RequestMapping(ARTICLE_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
+@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr","http://localhost:56678"})
 public class ArticleController {
     @Autowired
     private ArticleService articleService;

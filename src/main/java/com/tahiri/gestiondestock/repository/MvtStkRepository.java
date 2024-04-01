@@ -18,5 +18,8 @@ public interface MvtStkRepository  extends JpaRepository<MvtStk ,Integer> {
     BigDecimal stockReelArticle(@Param("idArticle") Integer idArticle);
 
     List<MvtStk> findByArticle_Id(Integer id);
+
+    @Query("SELECT m FROM MvtStk m GROUP BY m.article.id")
+    List<MvtStk> findAllGroupByIdArticle();
 }
 

@@ -38,6 +38,11 @@ public class MvtStkService {
     public  List<MvtStk> mvtStkArticle(Integer idArticle){
         return mvtStkRepository.findByArticle_Id(idArticle);
     }
+    public  List<MvtStk> mvtStkGrpouByArticle(){
+        return mvtStkRepository.findAllGroupByIdArticle();
+    }
+
+
 
     public MvtStk entreeStock(MvtStk mvtStk) {
         return entreePositive(mvtStk, TypeMvtStk.ENTREE);
@@ -79,5 +84,9 @@ public class MvtStkService {
         mvtStk.setTypeMvt(typeMvtStk);
         return mvtStkRepository.save(mvtStk);
 
+    }
+
+    public List<MvtStk> getAll() {
+        return this.mvtStkRepository.findAll();
     }
 }

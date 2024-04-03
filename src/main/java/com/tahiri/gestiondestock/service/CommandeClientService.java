@@ -9,6 +9,7 @@ import com.tahiri.gestiondestock.model.*;
 import com.tahiri.gestiondestock.repository.*;
 import com.tahiri.gestiondestock.validator.ArticleValidator;
 import com.tahiri.gestiondestock.validator.CommandeClientValidator;
+import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,10 +45,9 @@ public class CommandeClientService {
     public CommandeClient save(CommandeClient commandeClient) {
 
         List<String> errors = CommandeClientValidator.validate(commandeClient);
-        if (!errors.isEmpty()) {
-            log.error("Commande client n'est pas valide");
-            throw new InvalidEntityException("La commande client n'est pas valide", ErrorCodes.COMMANDE_CLIENT_NOT_VALID, errors);
-        }
+
+
+
 
         if (commandeClient.getId() != null && commandeClient.isCommandeLivree()) {
 
@@ -62,19 +62,33 @@ public class CommandeClientService {
         }
         List<String> articleErrors = new ArrayList<>();
 
-        if (commandeClient.getLigneCommadeClients() != null) {
-            commandeClient.getLigneCommadeClients().forEach(ligCmdClt -> {
+
+        if (commandeClient.getLigneCommandeClients() != null) {
+            commandeClient.getLigneCommandeClients().forEach(ligCmdClt -> {
+
                 if (ligCmdClt.getArticle() != null) {
                     Optional<Article> article = articleRepository.findById(ligCmdClt.getArticle().getId());
                     if (article.isEmpty()) {
+                        commandeClient.getLigneCommandeClients().forEach(lig->{
+                            LigneCommadeClientValidator.validate(lig).forEach(elm->{
+                                errors.add(elm);
+                            });
+                        });
                         articleErrors.add("L'article avec l'ID " + ligCmdClt.getArticle().getId() + " n'existe pas");
-                    } else {
-                        articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
                     }
+
+                }else {
+                    commandeClient.getLigneCommandeClients().forEach(lig->{
+                        LigneCommadeClientValidator.validate(lig).forEach(elm->{
+                            errors.add(elm);
+                        });
+                    });
+                    articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
                 }
             }
                     );
         }
+
 
         if (!articleErrors.isEmpty()) {
             log.warn("");
@@ -83,13 +97,13 @@ public class CommandeClientService {
 
         commandeClient.setDateCommande(Instant.now());
         CommandeClient saveCmdClt = commandeClientRepository.save(commandeClient);
-        if (commandeClient.getLigneCommadeClients() != null) {
+        if (commandeClient.getLigneCommandeClients() != null) {
 
-            commandeClient.getLigneCommadeClients().forEach(ligCmdClt->{
-                LigneCommadeClient ligneCommadeClient = ligneCommandeClientRepository.save(ligCmdClt);
-                ligneCommadeClient.setCommandeClient(saveCmdClt);
-                ligneCommadeClient.setIdEntreprise(saveCmdClt.getIdEntreprise());
-                LigneCommadeClient savedLigneCmd = ligneCommandeClientRepository.save(ligneCommadeClient);
+            commandeClient.getLigneCommandeClients().forEach(ligCmdClt->{
+                LigneCommandeClient ligneCommandeClient = ligneCommandeClientRepository.save(ligCmdClt);
+                ligneCommandeClient.setCommandeClient(saveCmdClt);
+                ligneCommandeClient.setIdEntreprise(saveCmdClt.getIdEntreprise());
+                LigneCommandeClient savedLigneCmd = ligneCommandeClientRepository.save(ligneCommandeClient);
                 effectuerSortie(savedLigneCmd);
 
                     }
@@ -138,7 +152,7 @@ public  CommandeClient findByCode(String reference){
          log.error("Commande client ID is NULL");
          return;
      }
-     List<LigneCommadeClient> ligneCommadeClients = ligneCommandeClientRepository.findByCommandeClient_Id(id);
+     List<LigneCommandeClient> ligneCommadeClients = ligneCommandeClientRepository.findByCommandeClient_Id(id);
      if (!ligneCommadeClients.isEmpty()) {
          throw new InvalidOperationException("Impossible de supprimer une commande client deja utilisee",
                  ErrorCodes.COMMANDE_CLIENT_ALREADY_IN_USE);
@@ -146,7 +160,7 @@ public  CommandeClient findByCode(String reference){
      commandeClientRepository.deleteById(id);
  }
 
- public  List<LigneCommadeClient> findAllLignesCommandesByCommandeClient(Integer idCommande){
+ public  List<LigneCommandeClient> findAllLignesCommandesByCommandeClient(Integer idCommande){
 
         return ligneCommandeClientRepository.findByCommandeClient_Id(idCommande);
  }
@@ -180,8 +194,8 @@ public  CommandeClient findByCode(String reference){
      }
      CommandeClient commandeClient = checkEtatCommande(idCommande);
 
-     Optional<LigneCommadeClient> ligneCommadeClientOptional= findLigneCommandeClient(idLigneCommande) ;
-     LigneCommadeClient ligneCommandeClient = ligneCommadeClientOptional.get();
+     Optional<LigneCommandeClient> ligneCommadeClientOptional= findLigneCommandeClient(idLigneCommande) ;
+     LigneCommandeClient ligneCommandeClient = ligneCommadeClientOptional.get();
      ligneCommandeClient.setQuantite(quantite);
      ligneCommandeClientRepository.save(ligneCommandeClient);
 
@@ -211,7 +225,7 @@ public  CommandeClient findByCode(String reference){
       checkIdLigneCommande(idLigneCommande);
       checkIdArticle(idArticle, "nouvel");
       CommandeClient commandeClient = checkEtatCommande(idCommande);
-      Optional<LigneCommadeClient> ligneCommandeClient= findLigneCommandeClient(idLigneCommande);
+      Optional<LigneCommandeClient> ligneCommandeClient= findLigneCommandeClient(idLigneCommande);
       Optional<Article> articleOptional = articleRepository.findById(idArticle);
       if (articleOptional.isEmpty()) {
           throw new EntityNotFoundException(
@@ -221,7 +235,7 @@ public  CommandeClient findByCode(String reference){
       if (!errors.isEmpty()) {
           throw new InvalidEntityException("Article invalid", ErrorCodes.ARTICLE_NOT_VALID, errors);
       }
-      LigneCommadeClient ligneCommandeClientToSaved = ligneCommandeClient.get();
+      LigneCommandeClient ligneCommandeClientToSaved = ligneCommandeClient.get();
       ligneCommandeClientToSaved.setArticle(articleOptional.get());
       ligneCommandeClientRepository.save(ligneCommandeClientToSaved);
       return commandeClient;
@@ -239,7 +253,7 @@ public  CommandeClient findByCode(String reference){
         return commandeClient;
     }
 
-    private void effectuerSortie(LigneCommadeClient lig) {
+    private void effectuerSortie(LigneCommandeClient lig) {
         MvtStk mvtStk= new MvtStk();
               mvtStk.setTypeMvt(TypeMvtStk.SORTIE);
               mvtStk.setQuantite(lig.getQuantite());
@@ -267,7 +281,7 @@ public  CommandeClient findByCode(String reference){
     }
 
     private void updateMvtStk(Integer idCommande) {
-        List<LigneCommadeClient> ligneCommandeClients = ligneCommandeClientRepository.findByCommandeClient_Id(idCommande);
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findByCommandeClient_Id(idCommande);
         ligneCommandeClients.forEach(lig -> {
             effectuerSortie(lig);
         });
@@ -280,8 +294,8 @@ public  CommandeClient findByCode(String reference){
                     ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
     }
-    private Optional<LigneCommadeClient> findLigneCommandeClient(Integer idLigneCommande) {
-        Optional<LigneCommadeClient> ligneCommandeClientOptional = ligneCommandeClientRepository.findById(idLigneCommande);
+    private Optional<LigneCommandeClient> findLigneCommandeClient(Integer idLigneCommande) {
+        Optional<LigneCommandeClient> ligneCommandeClientOptional = ligneCommandeClientRepository.findById(idLigneCommande);
         if (ligneCommandeClientOptional.isEmpty()) {
             throw new EntityNotFoundException(
                     "Aucune ligne commande client n'a ete trouve avec l'ID " + idLigneCommande, ErrorCodes.COMMANDE_CLIENT_NOT_FOUND);

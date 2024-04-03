@@ -1,6 +1,7 @@
 package com.tahiri.gestiondestock.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
@@ -35,6 +36,7 @@ public class CommandeFournisseur extends AbstractEntity{
     private  Fournisseur fournisseur;
 
     @OneToMany(mappedBy = "commandeFournisseur")
+    @NotNull(message = "La liste des lignes de commande ne peut pas être nulle")
     private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
 
     public boolean isCommandeLivree() {

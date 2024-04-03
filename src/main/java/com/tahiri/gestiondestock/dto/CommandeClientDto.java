@@ -1,13 +1,14 @@
 package com.tahiri.gestiondestock.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tahiri.gestiondestock.model.CommandeClient;
 import com.tahiri.gestiondestock.model.EtatCommande;
 
+import com.tahiri.gestiondestock.model.LigneCommandeClient;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,8 +22,8 @@ public class CommandeClientDto {
     private EtatCommande etatCommande;
     private ClientDto client;
 
-    @JsonIgnore
-    private List<LigneCommadeClientDto> ligneCommadeClients;
+
+    private List<Integer> ligneCommandeClients;
 
 
     public CommandeClientDto (CommandeClient commandeClient) {
@@ -32,6 +33,14 @@ public class CommandeClientDto {
         this.etatCommande=commandeClient.getEtatCommande();
         this.idEntreprise=commandeClient.getIdEntreprise();
         this.client=new ClientDto(commandeClient.getClient());
+        List<Integer> ling_id = new ArrayList<>();
+      if (commandeClient.getLigneCommandeClients() != null){
+          for (LigneCommandeClient lig : commandeClient.getLigneCommandeClients() ){
+              ling_id.add(lig.getId());
+          }
+          this.ligneCommandeClients=ling_id;
+
+      }
     }
 
 

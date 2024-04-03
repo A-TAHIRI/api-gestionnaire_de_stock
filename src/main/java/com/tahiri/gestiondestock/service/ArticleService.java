@@ -6,7 +6,7 @@ import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.model.Article;
-import com.tahiri.gestiondestock.model.LigneCommadeClient;
+import com.tahiri.gestiondestock.model.LigneCommandeClient;
 import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import com.tahiri.gestiondestock.model.LigneVente;
 import com.tahiri.gestiondestock.repository.ArticleRepository;
@@ -83,8 +83,8 @@ public class ArticleService {
         return ligneVenteRepository.findLigneVenteByArticle_Id(idArticle);
  }
 
-public  List<LigneCommadeClient> findHistoriqueCommandeClient(Integer idArticle){
-        return ligneCommandeClientRepository.findLigneCommadeClientByArticle_Id(idArticle);
+public  List<LigneCommandeClient> findHistoriqueCommandeClient(Integer idArticle){
+        return ligneCommandeClientRepository.findLigneCommandeClientByArticle_Id(idArticle);
 }
 
  public  List<LigneCommandeFournisseur> findHistoriqurCommandeFournisseur(Integer idArticle){
@@ -104,8 +104,8 @@ public  List<LigneCommadeClient> findHistoriqueCommandeClient(Integer idArticle)
             log.error("Article ID is null");
             return;
         }
-     List<LigneCommadeClient> ligneCommadeClients= ligneCommandeClientRepository.findByArticle_Id(id);
-        if (!ligneCommadeClients.isEmpty()) {
+     List<LigneCommandeClient> ligneCommandeClients= ligneCommandeClientRepository.findByArticle_Id(id);
+        if (!ligneCommandeClients.isEmpty()) {
             throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des commandes client", ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
 

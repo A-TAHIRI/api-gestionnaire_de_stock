@@ -21,8 +21,6 @@ public class AbstractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer id;
 
-
-
     @CreatedDate
     @Column(name ="createDate",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createDate;

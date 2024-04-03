@@ -16,6 +16,8 @@ public class CommandeClientValidator {
             errors.add("Veuillez renseigner la date de la commande");
             errors.add("Veuillez renseigner l'etat de la commande");
             errors.add("Veuillez renseigner le client");
+            errors.add("Veuillez renseigner le code de l'article");
+            errors.add("Veuillez renseigner la quantité");
             return errors;
         }
 
@@ -31,6 +33,12 @@ public class CommandeClientValidator {
         if (commandeClient.getClient() == null || commandeClient.getClient().getId() == null) {
             errors.add("Veuillez renseigner le client");
         }
+        if (commandeClient.getLigneCommandeClients()==null ){
+            errors.add("Veuillez renseigner le code de l'articl et la quantité");
+
+        }
+
+
 
         return errors;
     }

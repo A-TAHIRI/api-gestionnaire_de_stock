@@ -11,6 +11,8 @@ import com.tahiri.gestiondestock.repository.FournisseurRepository;
 import com.tahiri.gestiondestock.repository.LigneCommandeFournisseurRepository;
 import com.tahiri.gestiondestock.validator.ArticleValidator;
 import com.tahiri.gestiondestock.validator.CommandeFournisseurValidator;
+import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
+import com.tahiri.gestiondestock.validator.LigneCommadeFournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,9 @@ public class CommandeFournisseurService {
 
         List<String> errors = CommandeFournisseurValidator.validate(commandeFournisseur);
 
+
+
+
         if (!errors.isEmpty()) {
             log.error("Commande fournisseur n'est pas valide");
             throw new InvalidEntityException("La commande fournisseur n'est pas valide", ErrorCodes.COMMANDE_FOURNISSEUR_NOT_VALID, errors);
@@ -64,13 +69,26 @@ public class CommandeFournisseurService {
                 if (ligCmdFrs.getArticle() != null) {
                     Optional<Article> article = articleRepository.findById(ligCmdFrs.getArticle().getId());
                     if (article.isEmpty()) {
+                        commandeFournisseur.getLigneCommandeFournisseurs().forEach(ligne->{
+                            LigneCommadeFournisseurValidator.validate(ligne).forEach(elm->{
+                                errors.add(elm);
+                            });
+                        });
                         articleErrors.add("L'article avec l'ID " + ligCmdFrs.getArticle().getId() + " n'existe pas");
                     }
+
                 } else {
+                    commandeFournisseur.getLigneCommandeFournisseurs().forEach(ligne->{
+                        LigneCommadeFournisseurValidator.validate(ligne).forEach(elm->{
+                            errors.add(elm);
+                        });
+                    });
                     articleErrors.add("Impossible d'enregister une commande avec un aticle NULL");
                 }
             });
         }
+
+
 
         if (!articleErrors.isEmpty()) {
             log.warn("");

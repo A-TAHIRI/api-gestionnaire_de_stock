@@ -1,7 +1,7 @@
 package com.tahiri.gestiondestock.dto;
 
 
-import com.tahiri.gestiondestock.model.LigneCommadeClient;
+import com.tahiri.gestiondestock.model.LigneCommandeClient;
 
 import lombok.Data;
 
@@ -19,7 +19,7 @@ public class LigneCommadeClientDto {
 
     private CommandeClientDto commandeClient;
 
-    public LigneCommadeClientDto (LigneCommadeClient ligneCommadeClient) {
+    public LigneCommadeClientDto (LigneCommandeClient ligneCommadeClient) {
         this.id=ligneCommadeClient.getId();
         this.quantite=ligneCommadeClient.getQuantite();
         this.prixUnitaire=ligneCommadeClient.getPrixUnitaire();

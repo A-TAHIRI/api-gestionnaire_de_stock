@@ -80,7 +80,7 @@ public class MvtStkService {
             log.error("Article is not valid {}", mvtStk);
             throw new InvalidEntityException("Le mouvement du stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID, errors);
         }
-        mvtStk.setQuantite(BigDecimal.valueOf(  Math.abs(mvtStk.getQuantite().doubleValue() * -1) ));
+        mvtStk.setQuantite(BigDecimal.valueOf(mvtStk.getQuantite().doubleValue() * -1));
         mvtStk.setTypeMvt(typeMvtStk);
         return mvtStkRepository.save(mvtStk);
 

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = "LigneCommadeClient")
 
-public class LigneCommadeClient extends AbstractEntity {
+public class LigneCommandeClient extends AbstractEntity {
 
     @Column(name = "quantite")
     private BigDecimal quantite;

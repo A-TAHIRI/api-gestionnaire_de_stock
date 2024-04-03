@@ -12,8 +12,8 @@ public class MvtStkValidator {
     public static  List<String> validate(MvtStk mvtStk){
         List<String> errors = new ArrayList<>();
         if (mvtStk == null) {
-            errors.add("Veuillez renseigner la date du mouvenent");
-            errors.add("Veuillez renseigner la quantite du mouvenent");
+            errors.add("Veuillez renseigner la date du mouvemnent");
+            errors.add("Veuillez renseigner la quantite du mouvmenent");
             errors.add("Veuillez renseigner l'article");
             errors.add("Veuillez renseigner le type du mouvement");
 

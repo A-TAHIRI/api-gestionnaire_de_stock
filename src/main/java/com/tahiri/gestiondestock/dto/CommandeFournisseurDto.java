@@ -4,9 +4,11 @@ package com.tahiri.gestiondestock.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tahiri.gestiondestock.model.CommandeFournisseur;
 import com.tahiri.gestiondestock.model.EtatCommande;
+import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,8 +26,8 @@ public class CommandeFournisseurDto {
     private EtatCommande etatCommande;
     private FournisseurDto fournisseur;
 
-    @JsonIgnore
-    private List<LigneCommadeFournisseurDto> ligneCommandeFournisseurs;
+
+    private List<Integer> ligneCommandeFournisseurs ;
 
     public CommandeFournisseurDto (CommandeFournisseur commandeFournisseur) {
            this.id=commandeFournisseur.getId();
@@ -34,6 +36,16 @@ public class CommandeFournisseurDto {
            this.etatCommande=commandeFournisseur.getEtatCommande();
            this.idEntreprise=commandeFournisseur.getIdEntreprise();
            this.fournisseur= new FournisseurDto(commandeFournisseur.getFournisseur());
+           List<Integer> ling_id=new ArrayList<>();
+           if (commandeFournisseur.getLigneCommandeFournisseurs() != null){
+               for (LigneCommandeFournisseur lig : commandeFournisseur.getLigneCommandeFournisseurs()){
+                   ling_id.add(lig.getId());
+               }
+               this.ligneCommandeFournisseurs=ling_id;
+           }
+
+
+
 
         }
 

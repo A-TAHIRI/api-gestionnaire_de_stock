@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Table(name ="Contact")
 public class Contact extends  AbstractEntity {
 
+    @Column(name = "nom")
+    private  String nom;
     @Column(name = "email")
     private  String email;
     @Column(name = "sujet")

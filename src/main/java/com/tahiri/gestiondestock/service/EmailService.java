@@ -5,6 +5,7 @@ import com.tahiri.gestiondestock.dto.ChangerMotDePasseUtilisateurDto;
 import com.tahiri.gestiondestock.exception.EntityNotFoundException;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
+import com.tahiri.gestiondestock.manager.JwtsTokenGenerate;
 import com.tahiri.gestiondestock.model.Email;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.UtilisateurRepository;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,16 +35,22 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
+    private String extraitEmail;
+    private String token;
+
     @Autowired
-   private JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender;
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private ApplicationUserDetailService applicationUserDetailService;
 
 
-    private static final long EXPIRATION_TIME_MS = 300; // Durée de vie du jeton : 5min
+    private static final long EXPIRATION_TIME_MS = 360; // Durée de vie du jeton
+
     private static SecretKey secretKey() {
         String secretString = "wzUpGa9k4LTV3QHuY8qVrt6wOENkvdes5vLHVc1ex6581IiQ";
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretString));
@@ -57,16 +65,20 @@ public class EmailService {
                 .setSubject(userEmail)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith( secretKey(), Jwts.SIG.HS256)
+                .signWith(secretKey(), Jwts.SIG.HS256)
                 .compact();
+
     }
 
 
-    public  String sendMail(Email email){
+    public void sendMail(Email email) {
+        this.extraitEmail = email.getTo();
+
         try {
 
+            Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElse(null);
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper= new MimeMessageHelper(mimeMessage,true);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(fromEmail);
             mimeMessageHelper.setTo(email.getTo());
             if (email.getCc() != null) {
@@ -74,38 +86,58 @@ public class EmailService {
             }
 
             mimeMessageHelper.setSubject(email.getSubject());
-             String token =generateToken(email.getTo());
-             String mail =email.getTo();
+            this.token = generateToken(email.getTo());
+            this.modifierToken();
+
 
             mimeMessageHelper.setText("""
                     `
                                 <div>
                                     <p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
-                                    <a href="http://localhost:4200/reset-password?token=%s&mail=%s">Réinitialiser le mot de passe</a>
+                                    <a href="http://localhost:4200/reset-password?token=%s">Réinitialiser le mot de passe</a>
                                 </div>
                             `
-                    """  .formatted(token,mail) ,true);
+                    """.formatted(token), true);
 
 
-             if (email.getFile() != null){
-                 for (int i = 0; i < email.getFile().length; i++) {
-                     mimeMessageHelper.addAttachment(
-                             email.getFile()[i].getOriginalFilename(),
-                             new ByteArrayResource(email.getFile()[i].getBytes()));
-                 }
+            if (email.getFile() != null) {
+                for (int i = 0; i < email.getFile().length; i++) {
+                    mimeMessageHelper.addAttachment(
+                            email.getFile()[i].getOriginalFilename(),
+                            new ByteArrayResource(email.getFile()[i].getBytes()));
+                }
 
-             }
+            }
 
             javaMailSender.send(mimeMessage);
 
-         return "mail send";
-        }catch ( Exception e){
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public  boolean validateToken(String token) {
+    public Utilisateur modifierToken() {
+
+        // Recherche de l'utilisateur par email
+        Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElse(null);
+
+        // Vérification si l'utilisateur existe
+        if (utilisateur != null) {
+
+            // Modification du jeton de l'utilisateur
+            utilisateur.setToken(this.token);
+
+            // Enregistrement des modifications dans la base de données
+            return utilisateurRepository.save(utilisateur);
+        } else {
+            return null;
+        }
+    }
+
+
+    public boolean validateToken(String token) {
         try {
             Claims claims = Jwts.parser().verifyWith(secretKey()).build().parseSignedClaims(token).getPayload();
             return true;
@@ -117,27 +149,20 @@ public class EmailService {
     }
 
 
-    public  String readToken(String token) {
-
+    public String readToken(String token) {
         Claims claims = Jwts.parser().verifyWith(secretKey()).build().parseSignedClaims(token).getPayload();
-
         return claims.getSubject();
     }
 
-    public Utilisateur resetPassword(ChangerMotDePasseUtilisateurDto dto , String token){
-        boolean valide = this.validateToken(token);
-        if (valide == true){
-            String email = this.readToken(token);
-            Utilisateur utilisateur =this.utilisateurRepository.findByEmail(email).orElseThrow( ()-> new EntityNotFoundException("Aucun utilisateur n'a ete trouve avec l'ID " + email, ErrorCodes.UTILISATEUR_NOT_FOUND));
+    public Utilisateur resetPassword(ChangerMotDePasseUtilisateurDto dto, String token) throws Exception {
+        if (validateToken(token)) {
+            Utilisateur utilisateur = this.utilisateurRepository.findByToken(token).get(0);
             dto.setId(utilisateur.getId());
             utilisateur.setMdp(passwordEncoder.encode(dto.getMotDePasse()));
-
-         return  utilisateurRepository.save(utilisateur);
-
+            return utilisateurRepository.save(utilisateur);
         }
 
-       return null;
-
+        throw new Exception("Le token a expiré");
     }
 
 }

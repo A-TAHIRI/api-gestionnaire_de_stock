@@ -19,13 +19,14 @@ public class EmailSendController {
     UtilisateurService utilisateurService;
 
     @PostMapping("/email/send")
-    public String sendMail(@RequestBody Email email) {
-        return emailService.sendMail(email);
+    public void sendMail(@RequestBody Email email) {
+
+         emailService.sendMail(email);
     }
 
 
     @PutMapping("/reset-password")
-    public Utilisateur resetPasswor(@RequestBody ChangerMotDePasseUtilisateurDto dto, @RequestBody String token) {
+    public Utilisateur resetPasswor(@RequestBody ChangerMotDePasseUtilisateurDto dto, @RequestParam("token") String token) throws Exception {
         return this.emailService.resetPassword(dto, token);
     }
 

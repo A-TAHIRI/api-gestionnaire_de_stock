@@ -31,9 +31,16 @@ public class UtilisateurService{
 
     public Utilisateur save(Utilisateur utilisateur) {
         List<String> errors = UtilisateurValidator.validate(utilisateur);
+
         if (!errors.isEmpty()) {
             log.error("Utilisateur is not valid {}", utilisateur);
             throw new InvalidEntityException("L'utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID, errors);
+        }
+        if(!utilisateur.getEmail().contains("@")) {
+            throw  new RuntimeException("Votre mail invalide");
+        }
+        if(!utilisateur.getEmail().contains(".")) {
+            throw  new RuntimeException("Votre mail invalide");
         }
 
 
@@ -118,4 +125,5 @@ public class UtilisateurService{
                     ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
     }
+
 }

@@ -2,6 +2,8 @@ package com.tahiri.gestiondestock.repository;
 
 
 import com.tahiri.gestiondestock.model.MvtStk;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +23,9 @@ public interface MvtStkRepository  extends JpaRepository<MvtStk ,Integer> {
 
     @Query("SELECT m FROM MvtStk m GROUP BY m.article.id")
     List<MvtStk> findAllGroupByIdArticle();
+
+
+    @Query("SELECT m FROM MvtStk m WHERE m.article.designation LIKE %:name% GROUP BY m.article.id")
+    Page<MvtStk> findAllGroupByIdArticleContaining(@Param("name") String name, Pageable pageable);
 }
 

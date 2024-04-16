@@ -3,14 +3,18 @@ package com.tahiri.gestiondestock.controller;
 
 import com.tahiri.gestiondestock.dto.CommandeClientDto;
 import com.tahiri.gestiondestock.dto.LigneCommadeClientDto;
+import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.model.CommandeClient;
 import com.tahiri.gestiondestock.model.LigneCommandeClient;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.CommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.COMMANDE_CLIENT_ENDPOINT;
 
@@ -96,5 +100,21 @@ public class CommandeClientController {
         }
         return dtoList;
     };
+
+    @GetMapping("/commandes")
+    public Page<CommandeClientDto> getcommades(@RequestParam Optional<String> name,
+                                         @RequestParam Optional<Integer> page,
+                                         @RequestParam Optional<Integer> size){
+
+        Page<CommandeClient>   commandeClientPage  =   this.commandeClientService.getcommandes(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<CommandeClientDto> commandeClientDtoPage =commandeClientPage.map(client -> {
+            CommandeClientDto commandeClientDto =new CommandeClientDto(client);
+            return commandeClientDto;
+        });
+        return commandeClientDtoPage;
+
+    }
+
 
 }

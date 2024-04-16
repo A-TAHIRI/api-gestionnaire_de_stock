@@ -9,10 +9,12 @@ import com.tahiri.gestiondestock.model.CommandeFournisseur;
 import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import com.tahiri.gestiondestock.service.CommandeFournisseurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.COMMADE_FOURNISSEUR_ENDPOINT;
 
@@ -104,6 +106,22 @@ public class CommandeFournisseurController {
         }
       return dtoList;
     };
+
+    @GetMapping("/commandes")
+    public Page<CommandeFournisseurDto> getcommandes(@RequestParam Optional<String> name,
+                                            @RequestParam Optional<Integer> page,
+                                            @RequestParam Optional<Integer> size){
+
+        Page<CommandeFournisseur>   commandeFournisseurPage  =   this.commandeFournisseurService.getcommandes(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<CommandeFournisseurDto> commandeFournisseurDtoPage =commandeFournisseurPage.map(fournisseur -> {
+            CommandeFournisseurDto commandeFournisseurDto =new CommandeFournisseurDto(fournisseur);
+            return commandeFournisseurDto;
+        });
+        return commandeFournisseurDtoPage;
+
+    }
+
 
 
 

@@ -12,6 +12,7 @@ import com.tahiri.gestiondestock.validator.CommandeClientValidator;
 import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -309,6 +312,17 @@ public  CommandeClient findByCode(String reference){
             throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un " + msg + " ID article null",
                     ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
+    }
+
+    /**
+     * Service pour recupirer les Commande Client  par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<CommandeClient> getcommandes(String nom, int page, int size){
+        return commandeClientRepository.findByReferenceContaining(nom,of(page,size));
     }
 
 }

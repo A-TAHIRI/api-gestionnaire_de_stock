@@ -5,14 +5,18 @@ import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.model.MvtStk;
 import com.tahiri.gestiondestock.model.TypeMvtStk;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.MvtStkRepository;
 import com.tahiri.gestiondestock.validator.MvtStkValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -88,5 +92,17 @@ public class MvtStkService {
 
     public List<MvtStk> getAll() {
         return this.mvtStkRepository.findAll();
+    }
+
+
+    /**
+     * Service pour recupirer les MvtStk par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<MvtStk> getmvtstkbyarticle(String nom, int page, int size){
+        return mvtStkRepository.findAllGroupByIdArticleContaining(nom,of(page,size));
     }
 }

@@ -8,11 +8,13 @@ import com.tahiri.gestiondestock.model.MvtStk;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.MvtStkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.MVTSTK_ENOINT;
 
@@ -85,4 +87,18 @@ public class MvtStkController {
     }
 
 
+    @GetMapping("/mvtstkcontaining")
+    public Page<MvtStkDto> getmvtskbyarticle(@RequestParam Optional<String> name,
+                                         @RequestParam Optional<Integer> page,
+                                         @RequestParam Optional<Integer> size){
+
+        Page<MvtStk>   mvtStkPage  =   this.mvtStkService.getmvtstkbyarticle(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<MvtStkDto> mvtStkDtoPage =mvtStkPage.map(mvtStk -> {
+            MvtStkDto mvtStkDto =new MvtStkDto(mvtStk);
+            return mvtStkDto;
+        });
+        return mvtStkDtoPage;
+
+    }
 }

@@ -15,6 +15,7 @@ import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
 import com.tahiri.gestiondestock.validator.LigneCommadeFournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +24,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -309,5 +312,17 @@ public class CommandeFournisseurService {
                     ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
         }
     }
+
+    /**
+     * Service pour recupirer les Commande fournisseur  par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<CommandeFournisseur> getcommandes(String nom, int page, int size){
+        return commandeFournisseurRepository.findByReferenceContaining(nom,of(page,size));
+    }
+
 
 }

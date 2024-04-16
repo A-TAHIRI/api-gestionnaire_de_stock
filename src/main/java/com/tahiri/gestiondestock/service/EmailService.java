@@ -10,6 +10,7 @@ import com.tahiri.gestiondestock.model.Email;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.UtilisateurRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -49,7 +50,7 @@ public class EmailService {
     private ApplicationUserDetailService applicationUserDetailService;
 
 
-    private static final long EXPIRATION_TIME_MS = 360; // Durée de vie du jeton
+    private static final long EXPIRATION_TIME_MS = 36000; // Durée de vie du jeton
 
     private static SecretKey secretKey() {
         String secretString = "wzUpGa9k4LTV3QHuY8qVrt6wOENkvdes5vLHVc1ex6581IiQ";
@@ -76,7 +77,7 @@ public class EmailService {
 
         try {
 
-            Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElse(null);
+            Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElseThrow(()-> new EntityNotFoundException("aucun utilisateur associer à cet Email: " + email.getTo() ));
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(fromEmail);
@@ -121,7 +122,8 @@ public class EmailService {
     public Utilisateur modifierToken() {
 
         // Recherche de l'utilisateur par email
-        Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElse(null);
+        Utilisateur utilisateur = this.utilisateurRepository.findByEmail(this.extraitEmail).orElseThrow(()-> new EntityNotFoundException("aucun utilisateur associer à cet Email: " + this.extraitEmail
+        ) );
 
         // Vérification si l'utilisateur existe
         if (utilisateur != null) {
@@ -155,14 +157,22 @@ public class EmailService {
     }
 
     public Utilisateur resetPassword(ChangerMotDePasseUtilisateurDto dto, String token) throws Exception {
-        if (validateToken(token)) {
-            Utilisateur utilisateur = this.utilisateurRepository.findByToken(token).get(0);
-            dto.setId(utilisateur.getId());
-            utilisateur.setMdp(passwordEncoder.encode(dto.getMotDePasse()));
-            return utilisateurRepository.save(utilisateur);
-        }
 
-        throw new Exception("Le token a expiré");
+       // if (validateToken(token)) {throw new Exception("Le token a expiré");}
+            Utilisateur utilisateur = this.utilisateurRepository.findByToken(token).get(0);
+            if (utilisateur != null){
+                dto.setId(utilisateur.getId());
+                utilisateur.setMdp(passwordEncoder.encode(dto.getMotDePasse()));
+                return utilisateurRepository.save(utilisateur);
+            }else{
+                throw new Exception("Aucun utilisateur trouvé avec le token spécifié");
+            }
+
+
+
+
+
+
     }
 
 }

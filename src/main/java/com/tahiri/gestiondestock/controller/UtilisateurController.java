@@ -3,12 +3,15 @@ package com.tahiri.gestiondestock.controller;
 
 import com.tahiri.gestiondestock.dto.ChangerMotDePasseUtilisateurDto;
 import com.tahiri.gestiondestock.dto.UtilisateurDto;
-import com.tahiri.gestiondestock.model.Role;
+import com.tahiri.gestiondestock.model.HttpResponse;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.RolesRepository;
 import com.tahiri.gestiondestock.service.RoleService;
 import com.tahiri.gestiondestock.service.UtilisateurService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,6 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.UTILISATEUR_ENDPOINT;
+import static java.time.LocalDateTime.now;
+import static java.util.Map.of;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(UTILISATEUR_ENDPOINT)
@@ -36,6 +42,7 @@ public class UtilisateurController {
      *
      * @return
      */
+/*
     @GetMapping("")
     public List<UtilisateurDto> tousUtilisateurs() {
         List<Utilisateur> utilisateurs = utilisateurService.getdAll();
@@ -46,7 +53,7 @@ public class UtilisateurController {
         }
         return utilisateurDtos;
     }
-
+**/
     /**
      * recupirer l'utilisateur de l'id
      *
@@ -131,7 +138,38 @@ public class UtilisateurController {
     Utilisateur changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto){
         return utilisateurService.changerMotDePasse(dto)  ;
     }
+/*
+    @GetMapping("")
+    public ResponseEntity<HttpResponse> getUsers(@RequestParam Optional<String> name,
+                                                 @RequestParam Optional<Integer> page,
+                                                 @RequestParam Optional<Integer> size) throws InterruptedException {
+       // TimeUnit.SECONDS.sleep(3);
+        //throw new RuntimeException("Forced exception for testing");
+        return ResponseEntity.ok().body(
+                HttpResponse.builder()
+                        .timeStamp(now().toString())
+                        .data(of("page", utilisateurService.getUsers(name.orElse(""), page.orElse(0), size.orElse(10))))
+                        .message("Users Retrieved")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build());
 
+    }
+*/
 
+    @GetMapping("")
+    public Page<UtilisateurDto> getUsers(@RequestParam Optional<String> name,
+                                      @RequestParam Optional<Integer> page,
+                                      @RequestParam Optional<Integer> size){
+
+       Page<Utilisateur>   utilisateurPage  =   this.utilisateurService.getUsers(name.orElse(""),page.orElse(0),size.orElse(10));
+
+       Page<UtilisateurDto> utilisateurDtoPage =utilisateurPage.map(utilisateur -> {
+           UtilisateurDto utilisateurDto =new UtilisateurDto(utilisateur);
+           return utilisateurDto;
+       });
+       return utilisateurDtoPage;
+
+    }
 
 }

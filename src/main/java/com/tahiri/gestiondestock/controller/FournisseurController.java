@@ -3,15 +3,19 @@ package com.tahiri.gestiondestock.controller;
 import com.tahiri.gestiondestock.dto.ClientDto;
 import com.tahiri.gestiondestock.dto.EntrepriseDto;
 import com.tahiri.gestiondestock.dto.FournisseurDto;
+import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.model.Client;
 import com.tahiri.gestiondestock.model.Entreprise;
 import com.tahiri.gestiondestock.model.Fournisseur;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.FournisseurService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.FOURNISSEUR_ENDPOINT;
 
@@ -87,6 +91,21 @@ public class FournisseurController {
             return  new FournisseurDto(fournisseurService.save(fournisseur));
         }
         return  new FournisseurDto(fournisseurService.save(fournisseur));
+    }
+
+    @GetMapping("/fournisseurs")
+    public Page<FournisseurDto> getUsers(@RequestParam Optional<String> name,
+                                         @RequestParam Optional<Integer> page,
+                                         @RequestParam Optional<Integer> size){
+
+        Page<Fournisseur>   fournisseurPage  =   this.fournisseurService.getfournisseur(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<FournisseurDto> fournisseurDtoPage =fournisseurPage.map(fournisseur -> {
+            FournisseurDto fournisseurDto =new FournisseurDto(fournisseur);
+            return fournisseurDto;
+        });
+        return fournisseurDtoPage;
+
     }
 
 }

@@ -5,10 +5,7 @@ import com.tahiri.gestiondestock.exception.EntityNotFoundException;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
-import com.tahiri.gestiondestock.model.Article;
-import com.tahiri.gestiondestock.model.LigneCommandeClient;
-import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
-import com.tahiri.gestiondestock.model.LigneVente;
+import com.tahiri.gestiondestock.model.*;
 import com.tahiri.gestiondestock.repository.ArticleRepository;
 import com.tahiri.gestiondestock.repository.LigneCommandeClientRepository;
 import com.tahiri.gestiondestock.repository.LigneCommandeFournisseurRepository;
@@ -16,10 +13,13 @@ import com.tahiri.gestiondestock.repository.LigneVenteRepository;
 import com.tahiri.gestiondestock.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -115,5 +115,15 @@ public  List<LigneCommandeClient> findHistoriqueCommandeClient(Integer idArticle
                     ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
         articleRepository.deleteById(id);
+    }
+    /**
+     * Service pour recupirer les articles par page et par recherche
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Article> getArticles(String name, int page, int size){
+        return articleRepository.findByDesignationContaining(name,of(page,size));
     }
 }

@@ -6,15 +6,19 @@ import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.model.Article;
 import com.tahiri.gestiondestock.model.Categorie;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.ArticleRepository;
 import com.tahiri.gestiondestock.repository.CategorieRepository;
 import com.tahiri.gestiondestock.validator.CategorieValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -82,6 +86,15 @@ public class CategorieService {
         categorieRepository.deleteById(id);
     }
 
-
+    /**
+     * Service pour recupirer les categories par page et par recherche
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Categorie> getCategories(String name, int page, int size){
+        return categorieRepository.findByDesignationContaining(name,of(page,size));
+    }
 }
 

@@ -2,13 +2,17 @@ package com.tahiri.gestiondestock.controller;
 
 
 import com.tahiri.gestiondestock.dto.ClientDto;
+import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.model.Client;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.CLIENT_ENDPOINT;
 
@@ -85,5 +89,21 @@ public class ClientController {
             return  new ClientDto(clientService.save(client));
         }
         return  new ClientDto(clientService.save(client));
+    }
+
+
+    @GetMapping("/clients")
+    public Page<ClientDto> getUsers(@RequestParam Optional<String> name,
+                                         @RequestParam Optional<Integer> page,
+                                         @RequestParam Optional<Integer> size){
+
+        Page<Client>   clientPage  =   this.clientService.getclients(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<ClientDto> clientDtoPage =clientPage.map(client -> {
+            ClientDto clientDto =new ClientDto(client);
+            return clientDto;
+        });
+        return clientDtoPage;
+
     }
 }

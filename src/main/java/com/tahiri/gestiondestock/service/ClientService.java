@@ -6,14 +6,18 @@ import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.model.Client;
 import com.tahiri.gestiondestock.model.CommandeClient;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.ClientRepository;
 import com.tahiri.gestiondestock.repository.CommandeClientRepository;
 import com.tahiri.gestiondestock.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @Slf4j
@@ -66,6 +70,17 @@ public class ClientService {
                     ErrorCodes.CLIENT_ALREADY_IN_USE);
         }
         clientRepository.deleteById(id);
+    }
+
+    /**
+     * Service pour recupirer les client par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Client> getclients(String nom, int page, int size){
+        return clientRepository.findByNomContaining(nom,of(page,size));
     }
 
 

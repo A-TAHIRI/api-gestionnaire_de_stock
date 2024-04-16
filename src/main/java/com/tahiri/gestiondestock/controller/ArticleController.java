@@ -1,15 +1,19 @@
 package com.tahiri.gestiondestock.controller;
 
 import com.tahiri.gestiondestock.dto.ArticleDto;
+import com.tahiri.gestiondestock.dto.CategorieDto;
 import com.tahiri.gestiondestock.exception.WsException;
 import com.tahiri.gestiondestock.model.Article;
+import com.tahiri.gestiondestock.model.Categorie;
 import com.tahiri.gestiondestock.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.ARTICLE_ENDPOINT;
 
@@ -89,6 +93,21 @@ public class ArticleController {
     @GetMapping("/filter/{codeArticle}")
    public ArticleDto getArticleByCode(@PathVariable String codeArticle){
         return new ArticleDto(articleService.finByCodeArticle(codeArticle)) ;
+    }
+
+    @GetMapping("/articles")
+    public Page<ArticleDto> getArticles(@RequestParam Optional<String> name,
+                                            @RequestParam Optional<Integer> page,
+                                            @RequestParam Optional<Integer> size){
+
+        Page<Article>   articlePage  =   this.articleService.getArticles(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<ArticleDto> articleDtoPage =articlePage.map(article -> {
+            ArticleDto articleDto =new ArticleDto(article);
+            return articleDto;
+        });
+        return articleDtoPage;
+
     }
 
 

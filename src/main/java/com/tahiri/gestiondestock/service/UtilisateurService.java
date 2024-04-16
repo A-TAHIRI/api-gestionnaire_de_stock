@@ -1,7 +1,7 @@
 package com.tahiri.gestiondestock.service;
 
 import com.tahiri.gestiondestock.dto.ChangerMotDePasseUtilisateurDto;
-import com.tahiri.gestiondestock.dto.UtilisateurDto;
+
 import com.tahiri.gestiondestock.exception.EntityNotFoundException;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
@@ -9,16 +9,19 @@ import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.UtilisateurRepository;
 import com.tahiri.gestiondestock.validator.UtilisateurValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 
 @Service
@@ -126,4 +129,14 @@ public class UtilisateurService{
         }
     }
 
+    /**
+     * Service pour recupirer les utilisateur par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+   public Page<Utilisateur> getUsers(String nom, int page, int size){
+        return utilisateurRepository.findByNomContaining(nom,of(page,size));
+   }
 }

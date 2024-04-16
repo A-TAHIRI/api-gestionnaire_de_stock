@@ -7,14 +7,18 @@ import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.model.CommandeFournisseur;
 import com.tahiri.gestiondestock.model.Fournisseur;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.CommandeFournisseurRepository;
 import com.tahiri.gestiondestock.repository.FournisseurRepository;
 import com.tahiri.gestiondestock.validator.FournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 
 @Service
@@ -65,6 +69,17 @@ public class FournisseurService {
                     ErrorCodes.FOURNISSEUR_ALREADY_IN_USE);
         }
         fournisseurRepository.deleteById(id);
+    }
+
+    /**
+     * Service pour recupirer les fournisseur par page et par recherche
+     * @param nom
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Fournisseur> getfournisseur(String nom, int page, int size){
+        return fournisseurRepository.findByNomContaining(nom,of(page,size));
     }
 
 

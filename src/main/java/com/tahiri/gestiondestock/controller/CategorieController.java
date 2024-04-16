@@ -2,13 +2,17 @@ package com.tahiri.gestiondestock.controller;
 
 
 import com.tahiri.gestiondestock.dto.CategorieDto;
+import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.model.Categorie;
+import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.CategorieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.CATEGORIE_ENDPOINT;
 
@@ -23,6 +27,7 @@ public class CategorieController {
      * method pour récupirer tous les categories
      * @return
      */
+    /*
     @GetMapping("")
     public List<CategorieDto> touLescategiries(){
         List<Categorie> list= categorieService.getAll();
@@ -34,7 +39,7 @@ public class CategorieController {
         return dtoList;
     }
 
-
+*/
     /**
      * method pour recupirer une categorie
      * @param id
@@ -85,6 +90,21 @@ public class CategorieController {
             return  new CategorieDto(categorieService.save(categorie));
         }
         return  new CategorieDto(categorieService.save(categorie));
+
+    }
+
+    @GetMapping("/cate")
+    public Page<CategorieDto> getCategories(@RequestParam Optional<String> name,
+                                         @RequestParam Optional<Integer> page,
+                                         @RequestParam Optional<Integer> size){
+
+        Page<Categorie>   categoriePage  =   this.categorieService.getCategories(name.orElse(""),page.orElse(0),size.orElse(10));
+
+        Page<CategorieDto> categorieDtoPage =categoriePage.map(categorie -> {
+            CategorieDto categorieDto =new CategorieDto(categorie);
+            return categorieDto;
+        });
+        return categorieDtoPage;
 
     }
 

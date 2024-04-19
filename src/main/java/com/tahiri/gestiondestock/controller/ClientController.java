@@ -106,4 +106,62 @@ public class ClientController {
         return clientDtoPage;
 
     }
+
+    /**
+     * retourn le nombre des client dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bymonth")
+    public int getByMonth(){
+        return clientService.countClientBymouth();
+    }
+    /**
+     * retourn le nombre des client dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bythismonth")
+    public int getByThisMonth(){
+        return clientService.countClientByThisMouth();
+    }
+
+    /**
+     * retourn le nombre des client dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/byyear")
+    public int getByYear(){
+        return clientService.countClientByYear();
+    }
+    /**
+     * retourn le nombre des client dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/bylastyear")
+    public int getByLastYear(){
+        return clientService.countClientByLastYear();
+    }
+
+
+    /**
+     * retourn le nombre des client le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/byday")
+    public int getByDay(){
+        return clientService.countClientByDay();
+    }
+    /**
+     * retourn le nombre des client le jour président
+     * @return
+     */
+
+    @GetMapping("/bylastday")
+    public int getByLastDay(){
+        return clientService.countClientByLastDay();
+    }
 }

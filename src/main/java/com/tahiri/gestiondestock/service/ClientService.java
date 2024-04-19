@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.data.domain.PageRequest.of;
@@ -81,6 +83,61 @@ public class ClientService {
      */
     public Page<Client> getclients(String nom, int page, int size){
         return clientRepository.findByNomContaining(nom,of(page,size));
+    }
+
+
+    /**
+     * Service qui retourne le nombre des client de  mois prisident
+     * @return
+     */
+
+    public int countClientBymouth(){
+        return this.clientRepository.countClientsByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des client de  mois actuel
+     * @return
+     */
+
+    public int countClientByThisMouth(){
+        return this.clientRepository.countClientsByThisMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le nombre des client de cette année
+     * @return
+     */
+    public int countClientByYear(){
+        return this.clientRepository.countClientsByYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des client de l' année président
+     * @return
+     */
+    public int countClientByLastYear(){
+        return this.clientRepository.countClientsByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le nombre des client de aujourd'huit
+     * @return
+     */
+    public int countClientByDay(){
+        return this.clientRepository.countClientsByDay();
+    }
+    /**
+     * Service qui retourne le nombre des client d'hier
+     * @return
+     */
+    public int countClientByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.clientRepository.countClientsByYesterday(yesterdayTimestamp);
     }
 
 

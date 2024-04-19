@@ -134,6 +134,12 @@ public class UtilisateurController {
 
     }
 */
+
+    /**
+     * Modifier password
+     * @param dto
+     * @return
+     */
     @PutMapping("/update/password")
     Utilisateur changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto){
         return utilisateurService.changerMotDePasse(dto)  ;
@@ -157,6 +163,13 @@ public class UtilisateurController {
     }
 */
 
+    /**
+     * récuper les utilisateur par page (pagination)
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("")
     public Page<UtilisateurDto> getUsers(@RequestParam Optional<String> name,
                                       @RequestParam Optional<Integer> page,
@@ -170,6 +183,64 @@ public class UtilisateurController {
        });
        return utilisateurDtoPage;
 
+    }
+
+    /**
+     * retourn le nombre des utilisateur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bymonth")
+    public int getByMonth(){
+        return utilisateurService.countUtilisateurBymouth();
+    }
+    /**
+     * retourn le nombre des utilisateur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bythismonth")
+    public int getByThisMonth(){
+        return utilisateurService.countUtilisateurByThisMouth();
+    }
+
+    /**
+     * retourn le nombre des utilisateur dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/byyear")
+    public int getByYear(){
+        return utilisateurService.countUtilisateurByYear();
+    }
+    /**
+     * retourn le nombre des utilisateur dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/bylastyear")
+    public int getByLastYear(){
+        return utilisateurService.countUtilisateurByLastYear();
+    }
+
+
+    /**
+     * retourn le nombre des utilisateur le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/byday")
+    public int getByDay(){
+        return utilisateurService.countUtilisateurByDay();
+    }
+    /**
+     * retourn le nombre des utilisateur le jour président
+     * @return
+     */
+
+    @GetMapping("/bylastday")
+    public int getByLastDay(){
+        return utilisateurService.countUtilisateurByLastDay();
     }
 
 }

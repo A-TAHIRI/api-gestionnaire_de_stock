@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.data.domain.PageRequest.of;
@@ -80,6 +82,61 @@ public class FournisseurService {
      */
     public Page<Fournisseur> getfournisseur(String nom, int page, int size){
         return fournisseurRepository.findByNomContaining(nom,of(page,size));
+    }
+
+
+    /**
+     * Service qui retourne le nombre des fournisseur de  mois prisident
+     * @return
+     */
+
+    public int countFournisseurBymouth(){
+        return this.fournisseurRepository.countFournisseursByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des fournisseur de  mois actuel
+     * @return
+     */
+
+    public int countFournisseuByThisMouth(){
+        return this.fournisseurRepository.countFournisseursByThisMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le nombre des fournisseur de cette année
+     * @return
+     */
+    public int countFournisseuByYear(){
+        return this.fournisseurRepository.countFournisseursByYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des fournisseur de l' année président
+     * @return
+     */
+    public int countFournisseuByLastYear(){
+        return this.fournisseurRepository.countFournisseursByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le nombre des fournisseur de aujourd'huit
+     * @return
+     */
+    public int countFournisseuByDay(){
+        return this.fournisseurRepository.countFournisseursByDay();
+    }
+    /**
+     * Service qui retourne le nombre des fournisseur d'hier
+     * @return
+     */
+    public int countFournisseuByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.fournisseurRepository.countUtilisateursByYesterday(yesterdayTimestamp);
     }
 
 

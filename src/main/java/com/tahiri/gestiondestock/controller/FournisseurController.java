@@ -108,4 +108,63 @@ public class FournisseurController {
 
     }
 
+
+    /**
+     * retourn le nombre des fournisseur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bymonth")
+    public int getByMonth(){
+        return fournisseurService.countFournisseurBymouth();
+    }
+    /**
+     * retourn le nombre des fournisseur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bythismonth")
+    public int getByThisMonth(){
+        return fournisseurService.countFournisseuByThisMouth();
+    }
+
+    /**
+     * retourn le nombre des fournisseur dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/byyear")
+    public int getByYear(){
+        return fournisseurService.countFournisseuByYear();
+    }
+    /**
+     * retourn le nombre des fournisseur dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/bylastyear")
+    public int getByLastYear(){
+        return fournisseurService.countFournisseuByLastYear();
+    }
+
+
+    /**
+     * retourn le nombre des fournisseur le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/byday")
+    public int getByDay(){
+        return fournisseurService.countFournisseuByDay();
+    }
+    /**
+     * retourn le nombre des fournisseur le jour président
+     * @return
+     */
+
+    @GetMapping("/bylastday")
+    public int getByLastDay(){
+        return fournisseurService.countFournisseuByLastDay();
+    }
+
 }

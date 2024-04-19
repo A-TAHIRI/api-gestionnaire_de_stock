@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,4 +141,58 @@ public class UtilisateurService{
    public Page<Utilisateur> getUsers(String nom, int page, int size){
         return utilisateurRepository.findByNomContaining(nom,of(page,size));
    }
+
+    /**
+     * Service qui retourne le nombre des utilisateur de  mois prisident
+     * @return
+     */
+
+   public int countUtilisateurBymouth(){
+       return this.utilisateurRepository.countUtilisateursByMonthAndYear();
+   }
+
+    /**
+     * Service qui retourne le nombre des utilisateur de  mois actuel
+     * @return
+     */
+
+    public int countUtilisateurByThisMouth(){
+        return this.utilisateurRepository.countUtilisateursByThisMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le nombre des utilisateur de cette année
+     * @return
+     */
+   public int countUtilisateurByYear(){
+      return this.utilisateurRepository.countUtilisateursByYear();
+   }
+
+    /**
+     * Service qui retourne le nombre des utilisateur de l' année président
+     * @return
+     */
+    public int countUtilisateurByLastYear(){
+        return this.utilisateurRepository.countUtilisateursByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le nombre des utilisateur de aujourd'huit
+     * @return
+     */
+    public int countUtilisateurByDay(){
+        return this.utilisateurRepository.countUtilisateursByDay();
+    }
+    /**
+     * Service qui retourne le nombre des utilisateur d'hier
+     * @return
+     */
+    public int countUtilisateurByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.utilisateurRepository.countUtilisateursByYesterday(yesterdayTimestamp);
+    }
 }

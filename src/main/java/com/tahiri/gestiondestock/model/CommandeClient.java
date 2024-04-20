@@ -26,6 +26,10 @@ public class CommandeClient extends  AbstractEntity {
     @Column(name = "identreprise")
     private Integer idEntreprise;
 
+    @Column(name = "totalPrix")
+    private Float totalPrix;
+
+
     @Column(name = "etatcommande")
     @Enumerated(EnumType.STRING)
     private EtatCommande etatCommande;

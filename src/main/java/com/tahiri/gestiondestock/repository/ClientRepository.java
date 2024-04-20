@@ -19,7 +19,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
      * mois président
      * @return
      */
-    @Query("SELECT COUNT(c) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = (MONTH(CURRENT_DATE )-1)")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = (MONTH(CURRENT_DATE )-1)")
     int countClientsByMonthAndYear();
 
 
@@ -27,21 +27,21 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
      * mois actuel
      * @return
      */
-    @Query("SELECT COUNT(c) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = MONTH(CURRENT_DATE )")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = MONTH(CURRENT_DATE )")
     int countClientsByThisMonthAndYear();
 
     /**
      *cette année
      * @return
      */
-    @Query("SELECT COUNT(c) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE)")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE)")
     int countClientsByYear();
 
     /**
      * année président
      * @return
      */
-    @Query("SELECT COUNT(c) FROM Client c WHERE YEAR(c.createDate) = (YEAR(CURRENT_DATE)-1)")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE YEAR(c.createDate) = (YEAR(CURRENT_DATE)-1)")
     int countClientsByLastYear();
 
 
@@ -49,7 +49,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
      * aujour'huit
      * @return
      */
-    @Query("SELECT COUNT(c) FROM Client c WHERE DATE(c.createDate) = CURRENT_DATE")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE DATE(c.createDate) = CURRENT_DATE")
     int countClientsByDay();
 
     /**
@@ -57,7 +57,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
      * @return
      */
 
-    @Query("SELECT COUNT(c) FROM Client c WHERE DATE(c.createDate) = :yesterdayDate")
+    @Query("SELECT COALESCE(COUNT(c),0) FROM Client c WHERE DATE(c.createDate) = :yesterdayDate")
     int countClientsByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate);
 
 }

@@ -41,7 +41,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
      * mois président
      * @return
      */
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1)")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1)")
     int countUtilisateursByMonthAndYear();
 
 
@@ -49,21 +49,21 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
      * mois actuel
      * @return
      */
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE )")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE )")
     int countUtilisateursByThisMonthAndYear();
 
     /**
      *cette année
      * @return
      */
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE)")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE)")
     int countUtilisateursByYear();
 
     /**
      * année président
      * @return
      */
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1)")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1)")
     int countUtilisateursByLastYear();
 
 
@@ -71,7 +71,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
      * aujour'huit
      * @return
      */
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE DATE(u.createDate) = CURRENT_DATE")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE DATE(u.createDate) = CURRENT_DATE")
     int countUtilisateursByDay();
 
     /**
@@ -79,7 +79,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
      * @return
      */
 
-    @Query("SELECT COUNT(u) FROM Utilisateur u WHERE DATE(u.createDate) = :yesterdayDate")
+    @Query("SELECT COALESCE(COUNT(u),0) FROM Utilisateur u WHERE DATE(u.createDate) = :yesterdayDate")
     int countUtilisateursByYesterday(@Param("yesterdayDate")  Timestamp  yesterdayDate);
 
 }

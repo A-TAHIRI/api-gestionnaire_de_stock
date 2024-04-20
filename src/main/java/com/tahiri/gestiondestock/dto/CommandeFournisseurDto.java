@@ -23,6 +23,7 @@ public class CommandeFournisseurDto {
 
     private Instant dateCommande;
     private Integer idEntreprise;
+    private Float totalPrix;
     private EtatCommande etatCommande;
     private FournisseurDto fournisseur;
 
@@ -33,6 +34,7 @@ public class CommandeFournisseurDto {
            this.id=commandeFournisseur.getId();
            this.reference=commandeFournisseur.getReference();
            this.dateCommande=commandeFournisseur.getDateCommande();
+           this.totalPrix=commandeFournisseur.getTotalPrix();
            this.etatCommande=commandeFournisseur.getEtatCommande();
            this.idEntreprise=commandeFournisseur.getIdEntreprise();
            this.fournisseur= new FournisseurDto(commandeFournisseur.getFournisseur());

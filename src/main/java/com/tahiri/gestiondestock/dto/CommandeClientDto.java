@@ -18,6 +18,7 @@ public class CommandeClientDto {
     private Integer id;
     private String reference;
     private Instant dateCommande;
+    private Float totalPrix;
     private Integer idEntreprise;
     private EtatCommande etatCommande;
     private ClientDto client;
@@ -30,6 +31,7 @@ public class CommandeClientDto {
         this.id=commandeClient.getId();
         this.reference=commandeClient.getReference();
         this.dateCommande=commandeClient.getDateCommande();
+        this.totalPrix=commandeClient.getTotalPrix();
         this.etatCommande=commandeClient.getEtatCommande();
         this.idEntreprise=commandeClient.getIdEntreprise();
         this.client=new ClientDto(commandeClient.getClient());

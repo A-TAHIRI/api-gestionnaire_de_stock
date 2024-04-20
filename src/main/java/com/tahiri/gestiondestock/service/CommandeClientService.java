@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -324,5 +326,185 @@ public  CommandeClient findByCode(String reference){
     public Page<CommandeClient> getcommandes(String nom, int page, int size){
         return commandeClientRepository.findByReferenceContaining(nom,of(page,size));
     }
+
+
+
+
+    /*********************************************************************************  nombre de commande *********************************************************************/
+
+
+
+
+    /**
+     * Service qui retourne le nombre des CommandeClient de  mois prisident
+     * @return
+     */
+
+    public int countCommandeClientBymouth(){
+        return this.commandeClientRepository.countCommandeClientsByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des CommandeClient de  mois actuel
+     * @return
+     */
+
+    public int countCommandeClientByThisMouth(){
+        return this.commandeClientRepository.countCommandeClientsByThisMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le nombre des CommandeClient de cette année
+     * @return
+     */
+    public int countCommandeClientByYear(){
+        return this.commandeClientRepository.countCommandeClientsByYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des CommandeClient de l' année président
+     * @return
+     */
+    public int countCommandeClientByLastYear(){
+        return this.commandeClientRepository.countCommandeClientsByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le nombre des CommandeClient de aujourd'huit
+     * @return
+     */
+    public int countCommandeClientByDay(){
+        return this.commandeClientRepository.countCommandeClientsByDay();
+    }
+    /**
+     * Service qui retourne le nombre des CommandeClient d'hier
+     * @return
+     */
+    public int countCommandeClientByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.commandeClientRepository.countCommandeClientsByYesterday(yesterdayTimestamp);
+    }
+
+
+    /************************************************************************  REVENUE    **********************************************************/
+
+
+    /**
+     * Service qui retourne le revenue des CommandeClient de  mois actuel
+     * @return
+     */
+
+    public int sumCommandeClientBymouth(){
+        return this.commandeClientRepository.sumCommandeClientsByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le revenue des CommandeClient de  mois president
+     * @return
+     */
+
+    public int sumCommandeClientByLastMouth(){
+        return this.commandeClientRepository.sumCommandeClientsByLastMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le revenue des CommandeClient de cette année
+     * @return
+     */
+    public int sumCommandeClientByYear(){
+        return this.commandeClientRepository.sumCommandeClientsByYear();
+    }
+
+    /**
+     * Service qui retourne le revenue des CommandeClient de l' année président
+     * @return
+     */
+    public int sumCommandeClientByLastYear(){
+        return this.commandeClientRepository.sumCommandeClientsByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le revenue des CommandeClient de aujourd'huit
+     * @return
+     */
+    public int sumCommandeClientByDay(){
+        return this.commandeClientRepository.sumCommandeClientsByDay();
+    }
+    /**
+     * Service qui retourne le revenue des CommandeClient d'hier
+     * @return
+     */
+    public int sumCommandeClientByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+
+        return this.commandeClientRepository.sumCommandeClientsByYesterday(yesterdayTimestamp);
+    }
+
+
+    /**************************************************COMMANDE CLIENT PAR ORDER DESC TOTALPRIX *******************************************************/
+
+    /**
+     * Service qui retourne les CommandeClient  par order dec de  mois actuel
+     * @return
+     */
+
+    public List<CommandeClient> CmdCltByMonthByOrderByTotalPrixDesc(){
+        return this.commandeClientRepository.findCmdCltByMonthByOrderByTotalPrixDesc();
+    }
+
+    /**
+     * Service qui retourne les CommandeClient  par order dec de  mois president
+     * @return
+     */
+
+    public List<CommandeClient>CmdCltByLastMonthByOrderByTotalPrixDesc(){
+        return this.commandeClientRepository.findCmdCltByLastMonthByOrderByTotalPrixDesc();
+    }
+
+
+    /**
+     * Service qui retourne les CommandeClient  par order decde cette année
+     * @return
+     */
+    public List<CommandeClient>CmdCltByYearByOrderByTotalPrixDesc(){
+        return this.commandeClientRepository.findCmdCltByYearByOrderByTotalPrixDesc();
+    }
+
+    /**
+     * Service qui retourne les CommandeClient  par order dec de l' année président
+     * @return
+     */
+    public List<CommandeClient> CmdCltByLastYearByOrderByTotalPrixDesc(){
+        return this.commandeClientRepository.findCmdCltByLastYearByOrderByTotalPrixDesc();
+    }
+
+
+
+    /**
+     * Service qui retourne les CommandeClient  par order dec de aujourd'huit
+     * @return
+     */
+    public List<CommandeClient> CmdCltByDayByOrderByTotalPrixDesc(){
+        return this.commandeClientRepository.findCmdCltByDayByOrderByTotalPrixDesc();
+    }
+    /**
+     * Service qui retourne les CommandeClient  par order dec d'hier
+     * @return
+     */
+    public List<CommandeClient> CmdCltByLastDayByOrderByTotalPrixDesc(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+
+        return this.commandeClientRepository.findCmdCltByLastDayByOrderByTotalPrixDesc(yesterdayTimestamp);
+    }
+
 
 }

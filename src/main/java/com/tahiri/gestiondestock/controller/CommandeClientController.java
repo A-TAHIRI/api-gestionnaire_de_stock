@@ -117,4 +117,231 @@ public class CommandeClientController {
     }
 
 
+
+    /******************************************************nombre de commande*************************************************************************************/
+
+
+
+    /**
+     * retourn le nombre des CommandeClient dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bymonth")
+    public int getByMonth(){
+        return commandeClientService.countCommandeClientBymouth();
+    }
+    /**
+     * retourn le nombre des CommandeClient dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/bythismonth")
+    public int getByThisMonth(){
+        return commandeClientService.countCommandeClientByThisMouth();
+    }
+
+    /**
+     * retourn le nombre des CommandeClient dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/byyear")
+    public int getByYear(){
+        return commandeClientService.countCommandeClientByYear();
+    }
+    /**
+     * retourn le nombre des CommandeClient dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/bylastyear")
+    public int getByLastYear(){
+        return commandeClientService.countCommandeClientByLastYear();
+    }
+
+
+    /**
+     * retourn le nombre des CommandeClient le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/byday")
+    public int getByDay(){
+        return commandeClientService.countCommandeClientByDay();
+    }
+    /**
+     * retourn le nombre des CommandeClient le jour président
+     * @return
+     */
+
+    @GetMapping("/bylastday")
+    public int getByLastDay(){
+        return commandeClientService.countCommandeClientByLastDay();
+    }
+
+/************************** revenue **********************************/
+
+
+    /**
+     * retourn le nombre des CommandeClient dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/sumbymonth")
+    public int getSumByMonth(){
+        return commandeClientService.sumCommandeClientBymouth();
+    }
+    /**
+     * retourn le nombre des CommandeClient dans le mois president
+     * @return
+     */
+
+    @GetMapping("/sumbylastmonth")
+    public int getSumByLastMonth(){
+        return commandeClientService.sumCommandeClientByLastMouth();
+    }
+
+    /**
+     * retourn le nombre des CommandeClient dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/sumbyyear")
+    public int getSumByYear(){
+        return commandeClientService.sumCommandeClientByYear();
+    }
+    /**
+     * retourn le nombre des CommandeClient dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/sumbylastyear")
+    public int getSumByLastYear(){
+        return commandeClientService.sumCommandeClientByLastYear();
+    }
+
+
+    /**
+     * retourn le nombre des CommandeClient le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/sumbyday")
+    public int getSumByDay(){
+        return commandeClientService.sumCommandeClientByDay();
+    }
+    /**
+     * retourn le nombre des CommandeClient le jour président
+     * @return
+     */
+
+    @GetMapping("/sumbylastday")
+    public int getSumByLastDay(){
+        return commandeClientService.sumCommandeClientByLastDay();
+    }
+
+
+/***********************************************CLASSEMENT DES COMMANDES PAR ORDER DESC TOTLPRIX ************************************************************/
+
+
+
+    /**
+     * retourn les CommandeClients par order dec totalprix dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbymoth")
+    public List<CommandeClientDto>getCmdCltByMonthByOrderByTotalPrixDesc(){
+
+          List< CommandeClient>    commandeClients =   commandeClientService.CmdCltByMonthByOrderByTotalPrixDesc();
+         List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+          commandeClients.forEach(clt -> {
+             commandeClientDtos.add(new CommandeClientDto(clt)) ;
+          });
+
+           return commandeClientDtos ;
+    }
+    /**
+     * retourn les CommandeClients par order dec totalprix dans le mois president
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastmoth")
+    public List<CommandeClientDto> getCmdCltByLastMonthByOrderByTotalPrixDesc(){
+        List< CommandeClient>    commandeClients =   commandeClientService.CmdCltByLastMonthByOrderByTotalPrixDesc();
+        List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+        commandeClients.forEach(clt -> {
+            commandeClientDtos.add(new CommandeClientDto(clt)) ;
+        });
+        return commandeClientDtos ;
+
+    }
+
+    /**
+     * retourn les CommandeClients par order dec totalprixdans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbyyear")
+    public List<CommandeClientDto> getCmdCltByYearByOrderByTotalPrixDesc(){
+
+        List< CommandeClient>    commandeClients =  commandeClientService.CmdCltByYearByOrderByTotalPrixDesc();
+        List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+        commandeClients.forEach(clt -> {
+            commandeClientDtos.add(new CommandeClientDto(clt)) ;
+        });
+        return commandeClientDtos ;
+
+    }
+    /**
+     * retourn les CommandeClients par order dec totalprixdans l'anné président
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastyear")
+    public List<CommandeClientDto> getCmdCltByLastYearByOrderByTotalPrixDesc(){
+        List< CommandeClient>    commandeClients =  commandeClientService.CmdCltByLastYearByOrderByTotalPrixDesc();
+        List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+        commandeClients.forEach(clt -> {
+            commandeClientDtos.add(new CommandeClientDto(clt)) ;
+        });
+        return commandeClientDtos ;
+    }
+
+
+    /**
+     * retourn les CommandeClients par order dec totalprix le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbyday")
+    public List<CommandeClientDto> getCmdCltByDayByOrderByTotalPrixDesc(){
+
+        List< CommandeClient>    commandeClients =  commandeClientService.CmdCltByDayByOrderByTotalPrixDesc();
+        List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+        commandeClients.forEach(clt -> {
+            commandeClientDtos.add(new CommandeClientDto(clt)) ;
+        });
+        return commandeClientDtos ;
+
+    }
+    /**
+     * retourn les CommandeClients par order dec totalprix le jour président
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastday")
+    public List<CommandeClientDto> getCmdCltByLastDayByOrderByTotalPrixDesc(){
+
+        List< CommandeClient>    commandeClients =  commandeClientService.CmdCltByLastDayByOrderByTotalPrixDesc();
+        List<CommandeClientDto> commandeClientDtos= new ArrayList<>();
+        commandeClients.forEach(clt -> {
+            commandeClientDtos.add(new CommandeClientDto(clt)) ;
+        });
+        return commandeClientDtos ;
+
+    }
+
+
 }

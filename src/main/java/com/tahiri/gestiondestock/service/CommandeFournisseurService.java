@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -324,5 +326,179 @@ public class CommandeFournisseurService {
         return commandeFournisseurRepository.findByReferenceContaining(nom,of(page,size));
     }
 
+
+    /*********************************************************************nombre de commande **********************************************************************************************/
+
+
+
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur de  mois prisident
+     * @return
+     */
+
+    public int countCommandeFournisseurBymouth(){
+        return this.commandeFournisseurRepository.countCommandeFournisseursByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur de  mois actuel
+     * @return
+     */
+
+    public int countCommandeFournisseurByThisMouth(){
+        return this.commandeFournisseurRepository.countCommandeFournisseursByThisMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur de cette année
+     * @return
+     */
+    public int countCommandeFournisseurByYear(){
+        return this.commandeFournisseurRepository.countCommandeFournisseursByYear();
+    }
+
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur de l' année président
+     * @return
+     */
+    public int countCommandeFournisseurByLastYear(){
+        return this.commandeFournisseurRepository.countCommandeFournisseursByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur de aujourd'huit
+     * @return
+     */
+    public int countCommandeFournisseurByDay(){
+        return this.commandeFournisseurRepository.countCommandeFournisseursByDay();
+    }
+    /**
+     * Service qui retourne le nombre des CommandeFournisseur d'hier
+     * @return
+     */
+    public int countCommandeFournisseurByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.commandeFournisseurRepository.countCommandeFournisseursByYesterday(yesterdayTimestamp);
+    }
+
+ /****************************************************************************************************** REVENUE***********************************************************/
+
+
+
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur de  mois actuel
+     * @return
+     */
+
+    public int sumCommandeFournisseurBymouth(){
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByMonthAndYear();
+    }
+
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur de  mois president
+     * @return
+     */
+
+    public int sumCommandeFournisseurByLastMouth(){
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastMonthAndYear();
+    }
+
+
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur de cette année
+     * @return
+     */
+    public int sumCommandeFournisseurByYear(){
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByYear();
+    }
+
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur de l' année président
+     * @return
+     */
+    public int sumCommandeFournisseurByLastYear(){
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastYear();
+    }
+
+
+
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur de aujourd'huit
+     * @return
+     */
+    public int sumCommandeFournisseurByDay(){
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByDay();
+    }
+    /**
+     * Service qui retourne le revenue des CommandeFournisseur d'hier
+     * @return
+     */
+    public int sumCommandeFournisseurByLastDay(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByYesterday(yesterdayTimestamp);
+    }
+
+    /***********************************COMMANDE FOURNISSEURPAR ORDER DEC ************************************************************************/
+
+
+    /**
+     * Service qui retourne les CommandeFournisseur  par order dec de  mois actuel
+     * @return
+     */
+
+    public List<CommandeFournisseur> CmdFrsByMonthByOrderByTotalPrixDesc(){
+        return this.commandeFournisseurRepository.findCmdFrsByMonthByOrderByTotalPrixDesc();
+    }
+
+    /**
+     * Service qui retourne les CommandeFournisseur  par order dec de  mois president
+     * @return
+     */
+
+    public List<CommandeFournisseur>CmdFrsByLastMonthByOrderByTotalPrixDesc(){
+        return this.commandeFournisseurRepository.findCmdFrsByLastMonthByOrderByTotalPrixDesc();
+    }
+
+
+    /**
+     * Service qui retourne les CommandeFournisseur  par order decde cette année
+     * @return
+     */
+    public List<CommandeFournisseur>CmdFrsByYearByOrderByTotalPrixDesc(){
+        return this.commandeFournisseurRepository.findCmdFrsByYearByOrderByTotalPrixDesc();
+    }
+
+    /**
+     * Service qui retourne les CommandeFournisseur  par order dec de l' année président
+     * @return
+     */
+    public List<CommandeFournisseur> CmdFrsByLastYearByOrderByTotalPrixDesc(){
+        return this.commandeFournisseurRepository.findCmdFrsByLastYearByOrderByTotalPrixDesc();
+    }
+
+
+
+    /**
+     * Service qui retourne les CommandeFournisseur  par order dec de aujourd'huit
+     * @return
+     */
+    public List<CommandeFournisseur> CmdFrsByDayByOrderByTotalPrixDesc(){
+        return this.commandeFournisseurRepository.findCmdFrsByDayByOrderByTotalPrixDesc();
+    }
+    /**
+     * Service qui retourne les CommandeFournisseur  par order dec d'hier
+     * @return
+     */
+    public List<CommandeFournisseur> CmdFrsByLastDayByOrderByTotalPrixDesc(){
+        LocalDate yesterdayDate = LocalDate.now().minusDays(1);
+        Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+
+        return this.commandeFournisseurRepository.findCmdFrsByLastDayByOrderByTotalPrixDesc(yesterdayTimestamp);
+    }
 
 }

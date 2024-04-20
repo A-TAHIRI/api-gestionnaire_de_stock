@@ -121,8 +121,225 @@ public class CommandeFournisseurController {
         return commandeFournisseurDtoPage;
 
     }
+/*******************************************nombre de commande******************************************************/
+
+    /**
+     * retourn le nombre des CommandeFournisseur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/bymonth")
+    public int getByMonth(){
+        return commandeFournisseurService.countCommandeFournisseurBymouth();
+    }
+    /**
+     * retourn le nombre des CommandeFournisseur dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/bythismonth")
+    public int getByThisMonth(){
+        return commandeFournisseurService.countCommandeFournisseurByThisMouth();
+    }
+
+    /**
+     * retourn le nombre des CommandeFournisseur dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/byyear")
+    public int getByYear(){
+        return commandeFournisseurService.countCommandeFournisseurByYear();
+    }
+    /**
+     * retourn le nombre des CommandeFournisseur dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/bylastyear")
+    public int getByLastYear(){
+        return commandeFournisseurService.countCommandeFournisseurByLastDay();
+    }
 
 
+    /**
+     * retourn le nombre des CommandeFournisseur le jour actuelle
+     * @return
+     */
 
+    @GetMapping("/byday")
+    public int getByDay(){
+        return commandeFournisseurService.countCommandeFournisseurByDay();
+    }
+    /**
+     * retourn le nombre des CommandeFournisseur le jour président
+     * @return
+     */
+
+    @GetMapping("/bylastday")
+    public int getByLastDay(){
+        return commandeFournisseurService.countCommandeFournisseurByLastDay();
+    }
+
+    /***********************************************revenue****************************************/
+    /**
+     * retourn le revenue des CommandeFournisseur dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/sumbymonth")
+    public int getSumByMonth(){
+        return commandeFournisseurService.sumCommandeFournisseurBymouth();
+    }
+    /**
+     * retourn le revenue des CommandeFournisseur dans le mois president
+     * @return
+     */
+
+    @GetMapping("/sumbylastmonth")
+    public int getSumByLastMonth(){
+        return commandeFournisseurService.sumCommandeFournisseurByLastMouth();
+    }
+
+    /**
+     * retourn le revenue des CommandeFournisseur dans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/sumbyyear")
+    public int getSumByYear(){
+        return commandeFournisseurService.sumCommandeFournisseurByYear();
+    }
+    /**
+     * retourn le revenue des CommandeFournisseur dans l'anné président
+     * @return
+     */
+
+    @GetMapping("/sumbylastyear")
+    public int getSumByLastYear(){
+        return commandeFournisseurService.sumCommandeFournisseurByLastYear();
+    }
+
+
+    /**
+     * retourn le revenue des CommandeFournisseur le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/sumbyday")
+    public int getSumByDay(){
+        return commandeFournisseurService.sumCommandeFournisseurByDay();
+    }
+    /**
+     * retourn le revenue des CommandeFournisseur le jour président
+     * @return
+     */
+
+    @GetMapping("/sumbylastday")
+    public int getSumByLastDay(){
+        return commandeFournisseurService.sumCommandeFournisseurByLastDay();
+    }
+
+
+    /***********************************************CLASSEMENT DES COMMANDES PAR ORDER DESC ************************************************************/
+
+    /**
+     * retourn les CommandeFournisseur par order dec totalprix dans le mois actuel
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbymoth")
+    public List<CommandeFournisseurDto>getCmdFrsByMonthByOrderByTotalPrixDesc(){
+
+        List< CommandeFournisseur>    commandeFournisseurs =   commandeFournisseurService.CmdFrsByMonthByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+
+        return commandeFournisseurDtos ;
+    }
+    /**
+     * retourn les CommandeFournisseur par order dec totalprix dans le mois president
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastmoth")
+    public List<CommandeFournisseurDto> getCmdFrsByLastMonthByOrderByTotalPrixDesc(){
+        List< CommandeFournisseur>    commandeFournisseurs =   commandeFournisseurService.CmdFrsByLastMonthByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+
+        return commandeFournisseurDtos ;
+    }
+
+    /**
+     * retourn les CommandeFournisseur par order dec totalprixdans l'anné actuel
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbyyear")
+    public List<CommandeFournisseurDto> getCmdFrsByYearByOrderByTotalPrixDesc(){
+
+        List< CommandeFournisseur>    commandeFournisseurs =  commandeFournisseurService.CmdFrsByYearByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+
+        return commandeFournisseurDtos ;
+    }
+    /**
+     * retourn les CommandeFournisseur par order dec totalprixdans l'anné président
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastyear")
+    public List<CommandeFournisseurDto> getCmdFrsByLastYearByOrderByTotalPrixDesc(){
+        List< CommandeFournisseur>    commandeFournisseurs =  commandeFournisseurService.CmdFrsByLastYearByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+
+        return commandeFournisseurDtos ;
+    }
+
+
+    /**
+     * retourn les CommandeFournisseur par order dec totalprix le jour actuelle
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbyday")
+    public List<CommandeFournisseurDto> getCmdFrsByDayByOrderByTotalPrixDesc(){
+
+        List< CommandeFournisseur>    commandeFournisseurs =  commandeFournisseurService.CmdFrsByDayByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+
+        return commandeFournisseurDtos ;
+
+    }
+    /**
+     * retourn les CommandeFournisseur par order dec totalprix le jour président
+     * @return
+     */
+
+    @GetMapping("/cmdorderbytotlbylastday")
+    public List<CommandeFournisseurDto> getCmdFrsByLastDayByOrderByTotalPrixDesc(){
+
+        List< CommandeFournisseur>    commandeFournisseurs =  commandeFournisseurService.CmdFrsByLastDayByOrderByTotalPrixDesc();
+        List<CommandeFournisseurDto> commandeFournisseurDtos= new ArrayList<>();
+        commandeFournisseurs.forEach(frs -> {
+            commandeFournisseurDtos.add(new CommandeFournisseurDto(frs)) ;
+        });
+        return commandeFournisseurDtos ;
+
+    }
 
 }

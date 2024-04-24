@@ -13,10 +13,13 @@ import com.tahiri.gestiondestock.validator.ArticleValidator;
 import com.tahiri.gestiondestock.validator.CommandeFournisseurValidator;
 import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
 import com.tahiri.gestiondestock.validator.LigneCommadeFournisseurValidator;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -32,7 +35,8 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class CommandeFournisseurService {
-
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     private CommandeFournisseurRepository commandeFournisseurRepository;
     @Autowired
@@ -447,58 +451,172 @@ public class CommandeFournisseurService {
 
 
     /**
-     * Service qui retourne les CommandeFournisseur  par order dec de  mois actuel
+     * Service qui retourne les CommandeFournisseur par order dec de  mois actuel
+     *
      * @return
      */
 
-    public List<CommandeFournisseur> CmdFrsByMonthByOrderByTotalPrixDesc(){
-        return this.commandeFournisseurRepository.findCmdFrsByMonthByOrderByTotalPrixDesc();
+    @Transactional
+    public List<CommandeClientStats>  CmdFrsByMonthByOrderByTotalPrixDesc() {
+
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
+                + "AND MONTH(c.create_date) = MONTH(CURRENT_DATE) "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
+
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
+
     }
+
 
     /**
      * Service qui retourne les CommandeFournisseur  par order dec de  mois president
+     *
      * @return
      */
 
-    public List<CommandeFournisseur>CmdFrsByLastMonthByOrderByTotalPrixDesc(){
-        return this.commandeFournisseurRepository.findCmdFrsByLastMonthByOrderByTotalPrixDesc();
+    public List<CommandeClientStats> CmdFrsByLastMonthByOrderByTotalPrixDesc() {
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
+                + "AND MONTH(c.create_date) = (MONTH(CURRENT_DATE)-1) "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
+
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
     }
 
 
     /**
      * Service qui retourne les CommandeFournisseur  par order decde cette année
+     *
      * @return
      */
-    public List<CommandeFournisseur>CmdFrsByYearByOrderByTotalPrixDesc(){
-        return this.commandeFournisseurRepository.findCmdFrsByYearByOrderByTotalPrixDesc();
+    public List<CommandeClientStats> CmdFrsByYearByOrderByTotalPrixDesc() {
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
+
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
+
     }
 
     /**
      * Service qui retourne les CommandeFournisseur  par order dec de l' année président
+     *
      * @return
      */
-    public List<CommandeFournisseur> CmdFrsByLastYearByOrderByTotalPrixDesc(){
-        return this.commandeFournisseurRepository.findCmdFrsByLastYearByOrderByTotalPrixDesc();
+    public List<CommandeClientStats> CmdFrsByLastYearByOrderByTotalPrixDesc() {
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = (YEAR(CURRENT_DATE)-1) "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
     }
-
 
 
     /**
      * Service qui retourne les CommandeFournisseur  par order dec de aujourd'huit
+     *
      * @return
      */
-    public List<CommandeFournisseur> CmdFrsByDayByOrderByTotalPrixDesc(){
-        return this.commandeFournisseurRepository.findCmdFrsByDayByOrderByTotalPrixDesc();
+    public List<CommandeClientStats> CmdFrsByDayByOrderByTotalPrixDesc() {
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = CURRENT_DATE  "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
+
     }
+
     /**
      * Service qui retourne les CommandeFournisseur  par order dec d'hier
+     *
      * @return
      */
-    public List<CommandeFournisseur> CmdFrsByLastDayByOrderByTotalPrixDesc(){
+    public List<CommandeClientStats> CmdFrsByLastDayByOrderByTotalPrixDesc() {
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
+        String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
+                + "GROUP_CONCAT(ar.designation ) "
+                + "FROM commande_fournisseur c "
+                + "JOIN ligne_commande_fournisseur l "
+                + "ON c.id = l.idcommande_fournisseur "
+                + "JOIN article ar "
+                + "ON l.idarticle = ar.id "
+                + "JOIN fournisseur clt "
+                + "ON c.idfournisseur = clt.id "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = '" + yesterdayTimestamp + "' "
+                + "GROUP BY c.id "
+                + "ORDER BY total DESC LIMIT 5 ";
 
-        return this.commandeFournisseurRepository.findCmdFrsByLastDayByOrderByTotalPrixDesc(yesterdayTimestamp);
+        List<CommandeClientStats> resultList = new ArrayList<>();
+        entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .getResultList()
+                .forEach(elm -> resultList.add((CommandeClientStats) elm));
+        return resultList;
+
     }
 
 }

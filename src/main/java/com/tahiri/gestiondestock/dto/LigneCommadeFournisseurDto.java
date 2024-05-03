@@ -4,6 +4,8 @@ package com.tahiri.gestiondestock.dto;
 
 import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 

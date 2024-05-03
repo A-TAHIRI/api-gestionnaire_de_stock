@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,7 +41,7 @@ public class CommandeFournisseur extends AbstractEntity{
 
     @OneToMany(mappedBy = "commandeFournisseur")
     @NotNull(message = "La liste des lignes de commande ne peut pas être nulle")
-    private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
+    private List<LigneCommandeFournisseur> ligneCommandeFournisseurs = new ArrayList<LigneCommandeFournisseur>();
 
     public boolean isCommandeLivree() {
         return EtatCommande.LIVREE.equals(this.etatCommande);

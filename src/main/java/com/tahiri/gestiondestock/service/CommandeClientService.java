@@ -315,6 +315,14 @@ public class CommandeClientService {
         return ligneCommandeClientOptional;
     }
 
+    /**
+     * Service pour suprimer une ligne de commande
+     * @param id
+     */
+    public void delet(Integer id){
+         this.ligneCommandeClientRepository.deleteById(id);
+    }
+
     private void checkIdArticle(Integer idArticle, String msg) {
         if (idArticle == null) {
             log.error("L'ID de " + msg + " is NULL");

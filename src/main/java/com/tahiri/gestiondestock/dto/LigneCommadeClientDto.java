@@ -1,21 +1,25 @@
 package com.tahiri.gestiondestock.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tahiri.gestiondestock.model.LigneCommandeClient;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Data
-
 public class LigneCommadeClientDto {
     private Integer id;
     private BigDecimal quantite;
     private double prixUnitaire;
     private Integer idEntreprise;
     private ArticleDto article;
+
 
     private CommandeClientDto commandeClient;
 

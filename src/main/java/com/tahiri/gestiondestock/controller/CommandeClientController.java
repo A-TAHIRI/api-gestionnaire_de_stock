@@ -121,6 +121,16 @@ public class CommandeClientController {
 
     }
 
+    /**
+     * Methode pour supprimer une ligne de commande
+     * @param id
+     */
+    @DeleteMapping("/lignecommande/delet")
+       public  void supprimerligne(@RequestParam  Integer id){
+         this.commandeClientService.delet(id);
+    }
+
+
 
     /******************************************************nombre de commande*************************************************************************************/
 

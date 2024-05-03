@@ -329,7 +329,13 @@ public class CommandeFournisseurService {
     public Page<CommandeFournisseur> getcommandes(String nom, int page, int size){
         return commandeFournisseurRepository.findByReferenceContaining(nom,of(page,size));
     }
-
+    /**
+     * Service pour suprimer une ligne de commande
+     * @param id
+     */
+    public void delet(Integer id){
+        this.ligneCommandeFournisseurRepository.deleteById(id);
+    }
 
     /*********************************************************************nombre de commande **********************************************************************************************/
 

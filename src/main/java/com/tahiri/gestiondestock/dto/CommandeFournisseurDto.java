@@ -27,8 +27,8 @@ public class CommandeFournisseurDto {
     private EtatCommande etatCommande;
     private FournisseurDto fournisseur;
 
-
-    private List<Integer> ligneCommandeFournisseurs ;
+@JsonIgnore
+    private List<LigneCommandeFournisseur> ligneCommandeFournisseurs ;
 
     public CommandeFournisseurDto (CommandeFournisseur commandeFournisseur) {
            this.id=commandeFournisseur.getId();
@@ -38,7 +38,9 @@ public class CommandeFournisseurDto {
            this.etatCommande=commandeFournisseur.getEtatCommande();
            this.idEntreprise=commandeFournisseur.getIdEntreprise();
            this.fournisseur= new FournisseurDto(commandeFournisseur.getFournisseur());
+           /*
            List<Integer> ling_id=new ArrayList<>();
+
            if (commandeFournisseur.getLigneCommandeFournisseurs() != null){
                for (LigneCommandeFournisseur lig : commandeFournisseur.getLigneCommandeFournisseurs()){
                    ling_id.add(lig.getId());
@@ -46,9 +48,7 @@ public class CommandeFournisseurDto {
                this.ligneCommandeFournisseurs=ling_id;
            }
 
-
-
-
+            */
         }
 
 

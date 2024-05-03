@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,7 +41,7 @@ public class CommandeClient extends  AbstractEntity {
 
     @OneToMany(mappedBy = "commandeClient")
     @NotNull(message = "La liste des lignes de commande ne peut pas être nulle")
-    private List<LigneCommandeClient> ligneCommandeClients;
+    private List<LigneCommandeClient> ligneCommandeClients = new ArrayList<LigneCommandeClient>();
 
 
 

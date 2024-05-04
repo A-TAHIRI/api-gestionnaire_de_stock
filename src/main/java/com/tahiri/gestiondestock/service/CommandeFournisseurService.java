@@ -27,6 +27,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,12 +109,38 @@ public class CommandeFournisseurService {
 
         if (commandeFournisseur.getLigneCommandeFournisseurs() != null) {
             commandeFournisseur.getLigneCommandeFournisseurs().forEach(ligCmdFrs -> {
-                LigneCommandeFournisseur ligneCommandeFournisseur = ligneCommandeFournisseurRepository.save(ligCmdFrs);
-                ligneCommandeFournisseur.setCommandeFournisseur(savedCmdFrs);
-                ligneCommandeFournisseur.setIdEntreprise(savedCmdFrs.getIdEntreprise());
-                LigneCommandeFournisseur saveLigne = ligneCommandeFournisseurRepository.save(ligneCommandeFournisseur);
+                if (ligCmdFrs.getId() !=null){
+                    Optional<LigneCommandeFournisseur> optionalLigneCommandeFournisseur = this.ligneCommandeFournisseurRepository.findById(ligCmdFrs.getId());
+                    if (optionalLigneCommandeFournisseur.isPresent()) {
+                        MvtStk mvtStk = this.mvtStkService.findByIdLigneCltFrs(ligCmdFrs.getId());
+                        if (mvtStk != null) {
+                            ligCmdFrs.setId(ligCmdFrs.getId());
+                            ligCmdFrs.setCommandeFournisseur(ligCmdFrs.getCommandeFournisseur());
+                            ligCmdFrs.setArticle(ligCmdFrs.getArticle());
+                            ligCmdFrs.setPrixUnitaire(ligCmdFrs.getPrixUnitaire());
+                            ligCmdFrs.setQuantite(ligCmdFrs.getQuantite());
+                            ligCmdFrs.setIdEntreprise(ligCmdFrs.getIdEntreprise());
+                            ligCmdFrs.setLastModifiedDate(new Date());
+                            this.ligneCommandeFournisseurRepository.save(ligCmdFrs);
+                            mvtStk.setId(mvtStk.getId());
+                            mvtStk.setTypeMvt(mvtStk.getTypeMvt());
+                            mvtStk.setSourceMvt(mvtStk.getSourceMvt());
+                            mvtStk.setDateMvt(mvtStk.getDateMvt());
+                            mvtStk.setArticle(ligCmdFrs.getArticle());
+                            mvtStk.setQuantite(ligCmdFrs.getQuantite());
+                            mvtStk.setIdEntreprise(mvtStk.getIdEntreprise());
+                            mvtStk.setIdLignefrsclt(mvtStk.getIdLignefrsclt());
+                            mvtStk.setLastModifiedDate(new Date());
+                            mvtStkService.entreeStock(mvtStk);
+                        }
+                    } }else {
+                    LigneCommandeFournisseur ligneCommandeFournisseur = ligneCommandeFournisseurRepository.save(ligCmdFrs);
+                    ligneCommandeFournisseur.setCommandeFournisseur(savedCmdFrs);
+                    ligneCommandeFournisseur.setIdEntreprise(savedCmdFrs.getIdEntreprise());
+                    LigneCommandeFournisseur saveLigne = ligneCommandeFournisseurRepository.save(ligneCommandeFournisseur);
 
-                effectuerEntree(saveLigne);
+                    effectuerEntree(saveLigne);
+                }
             });
         }
 
@@ -265,6 +292,7 @@ public class CommandeFournisseurService {
         mvtStk.setTypeMvt(TypeMvtStk.ENTREE);
         mvtStk.setQuantite(lig.getQuantite());
         mvtStk.setDateMvt(Instant.now());
+      mvtStk.setIdLignefrsclt(lig.getId());
         mvtStk.setIdEntreprise(lig.getIdEntreprise());
         mvtStk.setArticle(lig.getArticle());
         mvtStk.setSourceMvt(SourceMvtStk.COMMANDE_FOURNISSEUR);

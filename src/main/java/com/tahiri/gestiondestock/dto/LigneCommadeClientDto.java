@@ -4,6 +4,7 @@ package com.tahiri.gestiondestock.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tahiri.gestiondestock.model.LigneCommandeClient;
 
+import com.tahiri.gestiondestock.model.MvtStk;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class LigneCommadeClientDto {
     private ArticleDto article;
 
 
+
+
     private CommandeClientDto commandeClient;
 
     public LigneCommadeClientDto (LigneCommandeClient ligneCommadeClient) {
@@ -30,6 +33,7 @@ public class LigneCommadeClientDto {
         this.idEntreprise=ligneCommadeClient.getIdEntreprise();
         this.article= new ArticleDto(ligneCommadeClient.getArticle());
         this.commandeClient=new CommandeClientDto(ligneCommadeClient.getCommandeClient());
+
 
 
     }

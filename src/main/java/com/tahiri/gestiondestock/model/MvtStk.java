@@ -34,8 +34,13 @@ public class MvtStk extends AbstractEntity {
     @Column(name = "identreprise")
     private Integer idEntreprise;
 
+    @Column(name ="idlignefrsclt" )
+    private Integer idLignefrsclt;
 
     @ManyToOne
     @JoinColumn(name = "idarticle")
     private Article article;
+
+
+
 }

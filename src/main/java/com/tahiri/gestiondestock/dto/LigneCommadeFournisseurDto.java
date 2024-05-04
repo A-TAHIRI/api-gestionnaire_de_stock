@@ -3,6 +3,7 @@ package com.tahiri.gestiondestock.dto;
 
 
 import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
+import com.tahiri.gestiondestock.model.MvtStk;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,6 @@ public class LigneCommadeFournisseurDto {
     private double prixUnitaire;
     private Integer idEntreprise;
 
-
     private ArticleDto article;
 
     private CommandeFournisseurDto commandeFournisseur;
@@ -32,6 +32,7 @@ public class LigneCommadeFournisseurDto {
         this.idEntreprise=ligneCommandeFournisseur.getIdEntreprise();
         this.article= new ArticleDto(ligneCommandeFournisseur.getArticle());
         this.commandeFournisseur= new CommandeFournisseurDto(ligneCommandeFournisseur.getCommandeFournisseur());
+
 
         }
 

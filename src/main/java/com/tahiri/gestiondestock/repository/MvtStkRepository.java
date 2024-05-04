@@ -27,5 +27,7 @@ public interface MvtStkRepository  extends JpaRepository<MvtStk ,Integer> {
 
     @Query("SELECT m FROM MvtStk m WHERE m.article.designation LIKE %:name% GROUP BY m.article.id")
     Page<MvtStk> findAllGroupByIdArticleContaining(@Param("name") String name, Pageable pageable);
+
+    MvtStk findByIdLignefrsclt(Integer idLignefrsclt);
 }
 

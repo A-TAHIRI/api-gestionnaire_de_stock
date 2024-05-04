@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,15 +109,41 @@ public class CommandeClientService {
         commandeClient.setDateCommande(Instant.now());
         CommandeClient saveCmdClt = commandeClientRepository.save(commandeClient);
         if (commandeClient.getLigneCommandeClients() != null) {
-
             commandeClient.getLigneCommandeClients().forEach(ligCmdClt -> {
-                        LigneCommandeClient ligneCommandeClient = ligneCommandeClientRepository.save(ligCmdClt);
-                        ligneCommandeClient.setCommandeClient(saveCmdClt);
-                        ligneCommandeClient.setIdEntreprise(saveCmdClt.getIdEntreprise());
-                        LigneCommandeClient savedLigneCmd = ligneCommandeClientRepository.save(ligneCommandeClient);
-                        effectuerSortie(savedLigneCmd);
+                if (ligCmdClt.getId() !=null){
+                Optional<LigneCommandeClient> optLigneCmdClt = this.ligneCommandeClientRepository.findById(ligCmdClt.getId());
+                            if (optLigneCmdClt.isPresent()) {
+                                MvtStk mvtStk = this.mvtStkService.findByIdLigneCltFrs(ligCmdClt.getId());
+                                if (mvtStk != null) {
+                                    ligCmdClt.setId(ligCmdClt.getId());
+                                    ligCmdClt.setCommandeClient(ligCmdClt.getCommandeClient());
+                                    ligCmdClt.setArticle(ligCmdClt.getArticle());
+                                    ligCmdClt.setPrixUnitaire(ligCmdClt.getPrixUnitaire());
+                                    ligCmdClt.setQuantite(ligCmdClt.getQuantite());
+                                    ligCmdClt.setIdEntreprise(ligCmdClt.getIdEntreprise());
+                                    ligCmdClt.setLastModifiedDate(new Date());
+                                  this.ligneCommandeClientRepository.save(ligCmdClt);
+                                  mvtStk.setId(mvtStk.getId());
+                                  mvtStk.setTypeMvt(mvtStk.getTypeMvt());
+                                  mvtStk.setSourceMvt(mvtStk.getSourceMvt());
+                                  mvtStk.setDateMvt(mvtStk.getDateMvt());
+                                  mvtStk.setArticle(ligCmdClt.getArticle());
+                                  mvtStk.setQuantite(ligCmdClt.getQuantite());
+                                  mvtStk.setIdEntreprise(mvtStk.getIdEntreprise());
+                                  mvtStk.setIdLignefrsclt(mvtStk.getIdLignefrsclt());
+                                  mvtStk.setLastModifiedDate(new Date());
+                              mvtStkService.sortieStock(mvtStk);
+                                }
+                            } }else {
 
+                                LigneCommandeClient ligneCommandeClient = ligneCommandeClientRepository.save(ligCmdClt);
+                                ligneCommandeClient.setCommandeClient(saveCmdClt);
+                                ligneCommandeClient.setIdEntreprise(saveCmdClt.getIdEntreprise());
+                                LigneCommandeClient savedLigneCmd = ligneCommandeClientRepository.save(ligneCommandeClient);
+                                effectuerSortie(savedLigneCmd);
+                            }
                     }
+
             );
 
         }
@@ -262,12 +289,16 @@ public class CommandeClientService {
 
         return commandeClient;
     }
-
+ public  boolean LigneExiste(Integer id){
+    Optional<LigneCommandeClient>  ligneCommandeClient  =ligneCommandeClientRepository.findById(id);
+    return ligneCommandeClient.isPresent();
+ }
     private void effectuerSortie(LigneCommandeClient lig) {
         MvtStk mvtStk = new MvtStk();
         mvtStk.setTypeMvt(TypeMvtStk.SORTIE);
         mvtStk.setQuantite(lig.getQuantite());
         mvtStk.setDateMvt(Instant.now());
+       mvtStk.setIdLignefrsclt(lig.getId());
         mvtStk.setIdEntreprise(lig.getIdEntreprise());
         mvtStk.setArticle(lig.getArticle());
         mvtStk.setSourceMvt(SourceMvtStk.COMMANDE_CLIENT);
@@ -487,7 +518,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "
@@ -517,7 +548,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "
@@ -545,7 +576,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "
@@ -572,7 +603,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "
@@ -598,7 +629,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "
@@ -626,7 +657,7 @@ public class CommandeClientService {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
-                + "JOIN ligne_commade_client l "
+                + "JOIN ligne_commande_client l "
                 + "ON c.id = l.idcommande_client "
                 + "JOIN article ar "
                 + "ON l.idarticle = ar.id "

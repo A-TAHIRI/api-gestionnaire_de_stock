@@ -38,6 +38,9 @@ public class MvtStkService {
         articleService.getById(idArticle);
         return mvtStkRepository.stockReelArticle(idArticle);
     }
+    public MvtStk save(MvtStk mvtStk){
+        return  this.mvtStkRepository.save(mvtStk);
+    }
 
     public  List<MvtStk> mvtStkArticle(Integer idArticle){
         return mvtStkRepository.findByArticle_Id(idArticle);
@@ -60,6 +63,23 @@ public class MvtStkService {
 
     public MvtStk correctionStockNeg(MvtStk mvtStk) {
         return sortieNegative(mvtStk, TypeMvtStk.CORRECTION_NEG);
+    }
+
+    /**
+     * Service qui retourn mvtstk par id de ligne de commande
+     * @param id
+     * @return
+     */
+    public MvtStk findByIdLigneCltFrs(Integer id ){
+        return mvtStkRepository.findByIdLignefrsclt(id);
+    }
+
+    /**
+     * Service pour suprimer mvtstk
+     * @param mvtStk
+     */
+    public  void delet( MvtStk mvtStk){
+        this.mvtStkRepository.delete(mvtStk);
     }
 
     private MvtStk entreePositive(MvtStk mvtStk, TypeMvtStk typeMvtStk) {

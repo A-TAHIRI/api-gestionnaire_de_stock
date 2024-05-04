@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "LigneCommadeClient")
+@Table(name = "LigneCommandeClient")
 
 public class LigneCommandeClient extends AbstractEntity {
 
@@ -33,4 +34,9 @@ public class LigneCommandeClient extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "idcommandeClient")
     private CommandeClient commandeClient;
+
+
+
+
+
 }

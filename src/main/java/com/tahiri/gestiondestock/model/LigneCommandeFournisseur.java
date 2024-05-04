@@ -32,4 +32,6 @@ public class LigneCommandeFournisseur extends  AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "idcommandeFournisseur")
     private  CommandeFournisseur commandeFournisseur;
+
+
 }

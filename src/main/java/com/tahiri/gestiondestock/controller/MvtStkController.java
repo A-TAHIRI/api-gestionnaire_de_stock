@@ -59,6 +59,16 @@ public class MvtStkController {
         return mvtStkDtos;
     }
 
+    /**
+     * Methode pour supprimer mvtstk avec l'id de lingne de commande
+     * @param id
+     */
+    @DeleteMapping("/delet")
+    public  void  deletByIdLigne(@RequestParam Integer id){
+        MvtStk mvtStk = this.mvtStkService.findByIdLigneCltFrs(id);
+        this.mvtStkService.delet(mvtStk);
+    }
+
 
     /**
      * Method pour récupirer tous mvtstk par article(id)

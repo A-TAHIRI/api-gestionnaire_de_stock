@@ -23,6 +23,9 @@ public interface CommandeFournisseurRepository extends JpaRepository<CommandeFou
 
     Page<CommandeFournisseur> findByReferenceContaining(String nom, Pageable pageable);
 
+    @Query("SELECT f.etatCommande FROM CommandeFournisseur f WHERE f.id = :id")
+    String findEtatCommandeById(@Param("id") Integer id);
+
 /***************************************** nombre de commande *****************************************************************************************/
 
     /**

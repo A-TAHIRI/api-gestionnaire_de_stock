@@ -61,7 +61,7 @@ public class CommandeFournisseurService {
             throw new InvalidEntityException("La commande fournisseur n'est pas valide", ErrorCodes.COMMANDE_FOURNISSEUR_NOT_VALID, errors);
         }
 
-        if (commandeFournisseur.getId() != null && commandeFournisseur.isCommandeLivree()) {
+        if (commandeFournisseur.getId() != null && "LIVREE".equals(this.etatCommandefournisseur(commandeFournisseur.getId()) )) {
             throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_FOURNISSEUR_NON_MODIFIABLE);
         }
 
@@ -147,7 +147,9 @@ public class CommandeFournisseurService {
         return commandeFournisseurRepository.save(savedCmdFrs);
 
     }
-
+    public String etatCommandefournisseur( Integer id){
+        return this.commandeFournisseurRepository.findEtatCommandeById(id);
+    }
     public CommandeFournisseur getById(Integer id) {
         if (id == null) {
             log.error("Commande fournisseur ID is NULL");

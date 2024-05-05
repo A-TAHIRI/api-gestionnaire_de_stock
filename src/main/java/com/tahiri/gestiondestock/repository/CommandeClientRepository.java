@@ -135,7 +135,8 @@ public interface CommandeClientRepository extends JpaRepository<CommandeClient, 
     @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeClient u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND  DATE(u.createDate) = :yesterdayDate")
     int sumCommandeClientsByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate);
 
-
+    @Query("SELECT c.etatCommande FROM CommandeClient c WHERE c.id = :id")
+    String findEtatCommandeById(@Param("id") Integer id);
 
     /******************************************* CMASEMENT DES COMMANDE PAR ORDER DESC DE TOTALPRIX *******************************************************************/
 

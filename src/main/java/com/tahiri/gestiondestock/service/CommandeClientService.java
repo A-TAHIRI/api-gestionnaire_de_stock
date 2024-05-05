@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.EntityResult;
 import jakarta.persistence.FieldResult;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -60,7 +61,7 @@ public class CommandeClientService {
         List<String> errors = CommandeClientValidator.validate(commandeClient);
 
 
-        if (commandeClient.getId() != null && commandeClient.isCommandeLivree()) {
+        if (commandeClient.getId() != null &&  "LIVREE".equals(this.etatCommande(commandeClient.getId()) )) {
 
             throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
@@ -152,6 +153,10 @@ public class CommandeClientService {
         return commandeClientRepository.save(saveCmdClt);
     }
 
+
+    public String etatCommande( Integer id){
+        return this.commandeClientRepository.findEtatCommandeById(id);
+    }
 
     public List<CommandeClient> getAll() {
 

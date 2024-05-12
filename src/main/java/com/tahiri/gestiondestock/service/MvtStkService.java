@@ -9,6 +9,7 @@ import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.MvtStkRepository;
 import com.tahiri.gestiondestock.validator.MvtStkValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class MvtStkService {
-
+    String identreprise = MDC.get("idEntreprise");
     @Autowired
     private MvtStkRepository mvtStkRepository;
 
@@ -45,8 +46,10 @@ public class MvtStkService {
     public  List<MvtStk> mvtStkArticle(Integer idArticle){
         return mvtStkRepository.findByArticle_Id(idArticle);
     }
+
     public  List<MvtStk> mvtStkGrpouByArticle(){
-        return mvtStkRepository.findAllGroupByIdArticle();
+        String identreprise = MDC.get("idEntreprise");
+        return mvtStkRepository.findAllGroupByIdArticle( );
     }
 
 
@@ -123,6 +126,7 @@ public class MvtStkService {
      * @return
      */
     public Page<MvtStk> getmvtstkbyarticle(String nom, int page, int size){
-        return mvtStkRepository.findAllGroupByIdArticleContaining(nom,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return mvtStkRepository.findAllGroupByIdArticleContainingAndIdEntreprise(nom,Integer.valueOf(identreprise), of(page,size));
     }
 }

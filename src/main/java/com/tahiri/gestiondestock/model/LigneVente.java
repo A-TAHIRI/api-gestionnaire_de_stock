@@ -34,4 +34,8 @@ public class LigneVente extends AbstractEntity {
     @JoinColumn(name = "idarticle")
     private Article article;
 
+    public boolean hasIdentreprise() {
+        return idEntreprise != null ;
+    }
+
 }

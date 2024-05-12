@@ -12,6 +12,7 @@ import com.tahiri.gestiondestock.repository.LigneCommandeFournisseurRepository;
 import com.tahiri.gestiondestock.repository.LigneVenteRepository;
 import com.tahiri.gestiondestock.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class ArticleService {
-
+    String identreprise = MDC.get("idEntreprise");
     @Autowired
     private ArticleRepository articleRepository;
 
@@ -124,6 +125,7 @@ public  List<LigneCommandeClient> findHistoriqueCommandeClient(Integer idArticle
      * @return
      */
     public Page<Article> getArticles(String name, int page, int size){
-        return articleRepository.findByDesignationContaining(name,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return articleRepository.findByDesignationContainingAndIdEntreprise(name,Integer.valueOf(identreprise) ,of(page,size));
     }
 }

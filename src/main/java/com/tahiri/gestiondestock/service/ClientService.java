@@ -11,6 +11,7 @@ import com.tahiri.gestiondestock.repository.ClientRepository;
 import com.tahiri.gestiondestock.repository.CommandeClientRepository;
 import com.tahiri.gestiondestock.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class ClientService {
+
     @Autowired
     private ClientRepository clientRepository;
 
@@ -82,7 +84,8 @@ public class ClientService {
      * @return
      */
     public Page<Client> getclients(String nom, int page, int size){
-        return clientRepository.findByNomContaining(nom,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return clientRepository.findByNomContainingAndIdEntreprise(nom,Integer.valueOf(identreprise) , of(page,size));
     }
 
 
@@ -91,8 +94,8 @@ public class ClientService {
      * @return
      */
 
-    public int countClientBymouth(){
-        return this.clientRepository.countClientsByMonthAndYear();
+    public int countClientBymouth(String identreprise){
+        return this.clientRepository.countClientsByMonthAndYear(identreprise);
     }
 
     /**
@@ -100,8 +103,8 @@ public class ClientService {
      * @return
      */
 
-    public int countClientByThisMouth(){
-        return this.clientRepository.countClientsByThisMonthAndYear();
+    public int countClientByThisMouth(String identreprise){
+        return this.clientRepository.countClientsByThisMonthAndYear(identreprise);
     }
 
 
@@ -109,16 +112,16 @@ public class ClientService {
      * Service qui retourne le nombre des client de cette année
      * @return
      */
-    public int countClientByYear(){
-        return this.clientRepository.countClientsByYear();
+    public int countClientByYear(String identreprise){
+        return this.clientRepository.countClientsByYear(identreprise);
     }
 
     /**
      * Service qui retourne le nombre des client de l' année président
      * @return
      */
-    public int countClientByLastYear(){
-        return this.clientRepository.countClientsByLastYear();
+    public int countClientByLastYear(String identreprise){
+        return this.clientRepository.countClientsByLastYear(identreprise);
     }
 
 
@@ -127,17 +130,17 @@ public class ClientService {
      * Service qui retourne le nombre des client de aujourd'huit
      * @return
      */
-    public int countClientByDay(){
-        return this.clientRepository.countClientsByDay();
+    public int countClientByDay(String identreprise){
+        return this.clientRepository.countClientsByDay(identreprise);
     }
     /**
      * Service qui retourne le nombre des client d'hier
      * @return
      */
-    public int countClientByLastDay(){
+    public int countClientByLastDay(String identreprise){
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.clientRepository.countClientsByYesterday(yesterdayTimestamp);
+        return this.clientRepository.countClientsByYesterday(yesterdayTimestamp,identreprise);
     }
 
 

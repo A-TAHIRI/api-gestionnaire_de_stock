@@ -22,5 +22,5 @@ public interface ArticleRepository extends JpaRepository<Article, Integer > {
 
     List<Article> findArticleByCategorie_Id(Integer id);
 
-    Page<Article> findByDesignationContaining(String name, Pageable pageable);
+    Page<Article> findByDesignationContainingAndIdEntreprise(String name, Integer identreprise, Pageable pageable);
 }

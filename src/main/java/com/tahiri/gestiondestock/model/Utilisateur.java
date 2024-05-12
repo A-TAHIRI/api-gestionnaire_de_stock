@@ -52,7 +52,7 @@ public class Utilisateur extends  AbstractEntity  implements UserDetails {
     @JoinColumn(name = "identreprise")
     private  Entreprise entreprise;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @OneToMany(fetch = FetchType.EAGER)

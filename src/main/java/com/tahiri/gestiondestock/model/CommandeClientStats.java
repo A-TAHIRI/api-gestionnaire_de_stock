@@ -10,8 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommandeClientStats {
-
-
     Integer id;
     String nom;
     String prenom;

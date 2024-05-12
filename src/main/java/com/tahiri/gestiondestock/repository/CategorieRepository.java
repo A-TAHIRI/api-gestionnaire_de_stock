@@ -13,5 +13,5 @@ import java.util.Optional;
 @Repository
 public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
     Optional<Categorie> findByCode(String code);
-    Page<Categorie> findByDesignationContaining(String name, Pageable pageable);
+    Page<Categorie> findByDesignationContainingAndIdEntreprise(String name,Integer identreprise, Pageable pageable);
 }

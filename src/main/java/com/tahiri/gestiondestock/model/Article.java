@@ -1,5 +1,6 @@
 package com.tahiri.gestiondestock.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,7 +55,6 @@ public class Article extends  AbstractEntity{
 
     @OneToMany
     private List<Photo> photos;
-
 
 
 

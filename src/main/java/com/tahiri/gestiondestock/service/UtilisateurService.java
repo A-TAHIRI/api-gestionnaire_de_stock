@@ -11,6 +11,7 @@ import com.tahiri.gestiondestock.repository.UtilisateurRepository;
 import com.tahiri.gestiondestock.validator.UtilisateurValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class UtilisateurService{
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+    String identreprise = MDC.get("idEntreprise");
 
     public Utilisateur save(Utilisateur utilisateur) {
         List<String> errors = UtilisateurValidator.validate(utilisateur);
@@ -139,7 +141,8 @@ public class UtilisateurService{
      * @return
      */
    public Page<Utilisateur> getUsers(String nom, int page, int size){
-        return utilisateurRepository.findByNomContaining(nom,of(page,size));
+       String identreprise = MDC.get("idEntreprise");
+        return utilisateurRepository.findByNomContainingAndEntrepriseId(nom, Integer.valueOf(identreprise),of(page,size));
    }
 
     /**
@@ -148,7 +151,8 @@ public class UtilisateurService{
      */
 
    public int countUtilisateurBymouth(){
-       return this.utilisateurRepository.countUtilisateursByMonthAndYear();
+       String identreprise = MDC.get("idEntreprise");
+       return this.utilisateurRepository.countUtilisateursByMonthAndYear(identreprise);
    }
 
     /**
@@ -157,7 +161,8 @@ public class UtilisateurService{
      */
 
     public int countUtilisateurByThisMouth(){
-        return this.utilisateurRepository.countUtilisateursByThisMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.utilisateurRepository.countUtilisateursByThisMonthAndYear(identreprise);
     }
 
 
@@ -166,7 +171,8 @@ public class UtilisateurService{
      * @return
      */
    public int countUtilisateurByYear(){
-      return this.utilisateurRepository.countUtilisateursByYear();
+       String identreprise = MDC.get("idEntreprise");
+      return this.utilisateurRepository.countUtilisateursByYear(identreprise);
    }
 
     /**
@@ -174,7 +180,8 @@ public class UtilisateurService{
      * @return
      */
     public int countUtilisateurByLastYear(){
-        return this.utilisateurRepository.countUtilisateursByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.utilisateurRepository.countUtilisateursByLastYear(identreprise);
     }
 
 
@@ -184,15 +191,17 @@ public class UtilisateurService{
      * @return
      */
     public int countUtilisateurByDay(){
-        return this.utilisateurRepository.countUtilisateursByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.utilisateurRepository.countUtilisateursByDay(identreprise);
     }
     /**
      * Service qui retourne le nombre des utilisateur d'hier
      * @return
      */
     public int countUtilisateurByLastDay(){
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.utilisateurRepository.countUtilisateursByYesterday(yesterdayTimestamp);
+        return this.utilisateurRepository.countUtilisateursByYesterday(yesterdayTimestamp,identreprise);
     }
 }

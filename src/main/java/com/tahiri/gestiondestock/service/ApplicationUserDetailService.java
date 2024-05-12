@@ -21,6 +21,7 @@ public class ApplicationUserDetailService  implements UserDetailsService {
 
 
     public Utilisateur findByToken(String token){
+
         List<Utilisateur> users = utilisateurRepository.findByToken(token);
         if (users.size() != 1){
             return null;
@@ -49,11 +50,11 @@ public class ApplicationUserDetailService  implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Utilisateur userDetails =  utilisateurRepository.findByEmailIgnoreCase(username);
-        if (userDetails == null) {
+        Utilisateur utilisateur =  utilisateurRepository.findByEmailIgnoreCase(username);
+        if (utilisateur == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return userDetails;
+        return utilisateur;
     }
 
 

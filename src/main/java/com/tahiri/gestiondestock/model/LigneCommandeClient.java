@@ -36,7 +36,9 @@ public class LigneCommandeClient extends AbstractEntity {
     private CommandeClient commandeClient;
 
 
-
+    public boolean hasIdentreprise() {
+        return idEntreprise != null ;
+    }
 
 
 }

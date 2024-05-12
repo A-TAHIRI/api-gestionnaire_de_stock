@@ -16,8 +16,10 @@ import com.tahiri.gestiondestock.validator.LigneCommadeFournisseurValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -36,6 +38,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class CommandeFournisseurService {
+    String identreprise = MDC.get("idEntreprise");
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -357,7 +360,8 @@ public class CommandeFournisseurService {
      * @return
      */
     public Page<CommandeFournisseur> getcommandes(String nom, int page, int size){
-        return commandeFournisseurRepository.findByReferenceContaining(nom,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return commandeFournisseurRepository.findByReferenceContainingAndIdEntreprise(nom,Integer.valueOf(identreprise), of(page,size));
     }
     /**
      * Service pour suprimer une ligne de commande
@@ -377,7 +381,8 @@ public class CommandeFournisseurService {
      */
 
     public int countCommandeFournisseurBymouth(){
-        return this.commandeFournisseurRepository.countCommandeFournisseursByMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.countCommandeFournisseursByMonthAndYear(identreprise);
     }
 
     /**
@@ -386,7 +391,8 @@ public class CommandeFournisseurService {
      */
 
     public int countCommandeFournisseurByThisMouth(){
-        return this.commandeFournisseurRepository.countCommandeFournisseursByThisMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.countCommandeFournisseursByThisMonthAndYear(identreprise);
     }
 
 
@@ -395,7 +401,8 @@ public class CommandeFournisseurService {
      * @return
      */
     public int countCommandeFournisseurByYear(){
-        return this.commandeFournisseurRepository.countCommandeFournisseursByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.countCommandeFournisseursByYear(identreprise);
     }
 
     /**
@@ -403,7 +410,8 @@ public class CommandeFournisseurService {
      * @return
      */
     public int countCommandeFournisseurByLastYear(){
-        return this.commandeFournisseurRepository.countCommandeFournisseursByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.countCommandeFournisseursByLastYear(identreprise);
     }
 
 
@@ -413,19 +421,21 @@ public class CommandeFournisseurService {
      * @return
      */
     public int countCommandeFournisseurByDay(){
-        return this.commandeFournisseurRepository.countCommandeFournisseursByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.countCommandeFournisseursByDay(identreprise);
     }
     /**
      * Service qui retourne le nombre des CommandeFournisseur d'hier
      * @return
      */
     public int countCommandeFournisseurByLastDay(){
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.commandeFournisseurRepository.countCommandeFournisseursByYesterday(yesterdayTimestamp);
+        return this.commandeFournisseurRepository.countCommandeFournisseursByYesterday(yesterdayTimestamp,identreprise);
     }
 
- /****************************************************************************************************** REVENUE***********************************************************/
+ /****************************************************************************************************** DEPENCE***********************************************************/
 
 
 
@@ -435,7 +445,8 @@ public class CommandeFournisseurService {
      */
 
     public int sumCommandeFournisseurBymouth(){
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByMonthAndYear(identreprise);
     }
 
     /**
@@ -444,7 +455,8 @@ public class CommandeFournisseurService {
      */
 
     public int sumCommandeFournisseurByLastMouth(){
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastMonthAndYear(identreprise);
     }
 
 
@@ -453,7 +465,8 @@ public class CommandeFournisseurService {
      * @return
      */
     public int sumCommandeFournisseurByYear(){
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByYear(identreprise);
     }
 
     /**
@@ -461,7 +474,8 @@ public class CommandeFournisseurService {
      * @return
      */
     public int sumCommandeFournisseurByLastYear(){
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByLastYear(identreprise);
     }
 
 
@@ -471,16 +485,18 @@ public class CommandeFournisseurService {
      * @return
      */
     public int sumCommandeFournisseurByDay(){
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByDay(identreprise);
     }
     /**
      * Service qui retourne le revenue des CommandeFournisseur d'hier
      * @return
      */
     public int sumCommandeFournisseurByLastDay(){
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.commandeFournisseurRepository.sumCommandeFournisseursByYesterday(yesterdayTimestamp);
+        return this.commandeFournisseurRepository.sumCommandeFournisseursByYesterday(yesterdayTimestamp,identreprise);
     }
 
     /***********************************COMMANDE FOURNISSEURPAR ORDER DEC ************************************************************************/
@@ -493,7 +509,7 @@ public class CommandeFournisseurService {
      */
 
     @Transactional
-    public List<CommandeClientStats>  CmdFrsByMonthByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats>  CmdFrsByMonthByOrderByTotalPrixDesc(String identreprise) {
 
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
@@ -505,12 +521,13 @@ public class CommandeFournisseurService {
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
                 + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
-                + "AND MONTH(c.create_date) = MONTH(CURRENT_DATE) "
+                + "AND MONTH(c.create_date) = MONTH(CURRENT_DATE) AND l.identreprise = :identreprise "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -524,7 +541,7 @@ public class CommandeFournisseurService {
      * @return
      */
 
-    public List<CommandeClientStats> CmdFrsByLastMonthByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdFrsByLastMonthByOrderByTotalPrixDesc(String identreprise) {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_fournisseur c "
@@ -535,12 +552,13 @@ public class CommandeFournisseurService {
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
                 + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
-                + "AND MONTH(c.create_date) = (MONTH(CURRENT_DATE)-1) "
+                + "AND MONTH(c.create_date) = (MONTH(CURRENT_DATE)-1) AND l.identreprise = :identreprise "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -552,7 +570,7 @@ public class CommandeFournisseurService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdFrsByYearByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdFrsByYearByOrderByTotalPrixDesc(String identreprise) {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_fournisseur c "
@@ -562,12 +580,13 @@ public class CommandeFournisseurService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
+                + "WHERE l.identreprise = :identreprise AND YEAR(c.create_date) = YEAR(CURRENT_DATE) "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -579,7 +598,7 @@ public class CommandeFournisseurService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdFrsByLastYearByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdFrsByLastYearByOrderByTotalPrixDesc(String identreprise) {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_fournisseur c "
@@ -589,11 +608,12 @@ public class CommandeFournisseurService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
-                + "WHERE YEAR(c.create_date) = (YEAR(CURRENT_DATE)-1) "
+                + "WHERE l.identreprise = :identreprise AND YEAR(c.create_date) = (YEAR(CURRENT_DATE)-1) "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -605,7 +625,7 @@ public class CommandeFournisseurService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdFrsByDayByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdFrsByDayByOrderByTotalPrixDesc(String identreprise) {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_fournisseur c "
@@ -615,11 +635,12 @@ public class CommandeFournisseurService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = CURRENT_DATE  "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = CURRENT_DATE  AND l.identreprise = :identreprise "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -631,7 +652,7 @@ public class CommandeFournisseurService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdFrsByLastDayByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdFrsByLastDayByOrderByTotalPrixDesc(String identreprise) {
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
@@ -643,12 +664,13 @@ public class CommandeFournisseurService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN fournisseur clt "
                 + "ON c.idfournisseur = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = '" + yesterdayTimestamp + "' "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = '" + yesterdayTimestamp + "' AND l.identreprise = :identreprise "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;

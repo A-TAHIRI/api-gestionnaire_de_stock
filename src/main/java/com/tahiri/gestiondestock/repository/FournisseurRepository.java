@@ -14,52 +14,52 @@ import java.sql.Timestamp;
 
 @Repository
 public interface FournisseurRepository extends JpaRepository<Fournisseur, Integer> {
-    Page<Fournisseur> findByNomContaining(String name, Pageable pageable);
+    Page<Fournisseur> findByNomContainingAndIdEntreprise(String name,Integer identreprise, Pageable pageable);
 
 
     /**
      * mois président
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE) AND MONTH(f.createDate) = (MONTH(CURRENT_DATE )-1)")
-    int countFournisseursByMonthAndYear();
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE) AND MONTH(f.createDate) = (MONTH(CURRENT_DATE )-1) AND f.idEntreprise = :identreprise")
+    int countFournisseursByMonthAndYear(@Param("identreprise") String identreprise);
 
 
     /**
      * mois actuel
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE) AND MONTH(f.createDate) = MONTH(CURRENT_DATE )")
-    int countFournisseursByThisMonthAndYear();
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE) AND MONTH(f.createDate) = MONTH(CURRENT_DATE ) AND f.idEntreprise = :identreprise")
+    int countFournisseursByThisMonthAndYear(@Param("identreprise") String identreprise);
 
     /**
      *cette année
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE)")
-    int countFournisseursByYear();
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = YEAR(CURRENT_DATE) AND f.idEntreprise = :identreprise")
+    int countFournisseursByYear(@Param("identreprise") String identreprise);
 
     /**
      * année président
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = (YEAR(CURRENT_DATE)-1)")
-    int countFournisseursByLastYear();
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE YEAR(f.createDate) = (YEAR(CURRENT_DATE)-1) AND f.idEntreprise = :identreprise")
+    int countFournisseursByLastYear(@Param("identreprise") String identreprise);
 
 
     /**
      * aujour'huit
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE DATE(f.createDate) = CURRENT_DATE")
-    int countFournisseursByDay();
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE DATE(f.createDate) = CURRENT_DATE AND f.idEntreprise = :identreprise")
+    int countFournisseursByDay(@Param("identreprise") String identreprise);
 
     /**
      * hier
      * @return
      */
 
-    @Query("SELECT COALESCE(COUNT(f),0) FROM Utilisateur f WHERE DATE(f.createDate) = :yesterdayDate")
-    int countUtilisateursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate);
+    @Query("SELECT COALESCE(COUNT(f),0) FROM Fournisseur f WHERE DATE(f.createDate) = :yesterdayDate AND f.idEntreprise = :identreprise")
+    int countFournisseursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate,@Param("identreprise") String identreprise);
 
 }

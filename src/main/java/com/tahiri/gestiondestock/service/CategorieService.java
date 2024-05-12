@@ -11,6 +11,7 @@ import com.tahiri.gestiondestock.repository.ArticleRepository;
 import com.tahiri.gestiondestock.repository.CategorieRepository;
 import com.tahiri.gestiondestock.validator.CategorieValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class CategorieService {
+    String identreprise = MDC.get("idEntreprise");
     @Autowired
     private CategorieRepository categorieRepository;
     @Autowired
@@ -39,6 +41,7 @@ public class CategorieService {
     }
 
     public List<Categorie> getAll() {
+
         return categorieRepository.findAll();
     }
 
@@ -94,7 +97,8 @@ public class CategorieService {
      * @return
      */
     public Page<Categorie> getCategories(String name, int page, int size){
-        return categorieRepository.findByDesignationContaining(name,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return categorieRepository.findByDesignationContainingAndIdEntreprise(name,Integer.valueOf(identreprise) ,of(page,size));
     }
 }
 

@@ -7,10 +7,13 @@ import com.tahiri.gestiondestock.dto.LigneCommadeClientDto;
 import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.model.*;
 import com.tahiri.gestiondestock.service.CommandeClientService;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -269,6 +272,7 @@ public class CommandeClientController {
 
     @GetMapping("/sumbylastday")
     public int getSumByLastDay() {
+        String identreprise = MDC.get("idEntreprise");
         return commandeClientService.sumCommandeClientByLastDay();
     }
 
@@ -284,7 +288,8 @@ public class CommandeClientController {
 
     @GetMapping("/cmdorderbytotlbymoth")
     public List<CommandeClientStats> getCmdCltByMonthByOrderByTotalPrixDesc() {
-       return commandeClientService.CmdCltByMonthByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+       return commandeClientService.CmdCltByMonthByOrderByTotalPrixDesc(identreprise);
     }
 
     /**
@@ -295,7 +300,8 @@ public class CommandeClientController {
 
     @GetMapping("/cmdorderbytotlbylastmoth")
     public List<CommandeClientStats> getCmdCltByLastMonthByOrderByTotalPrixDesc() {
-     return  this.commandeClientService.CmdCltByLastMonthByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+     return  this.commandeClientService.CmdCltByLastMonthByOrderByTotalPrixDesc(identreprise);
     }
 
     /**
@@ -306,7 +312,8 @@ public class CommandeClientController {
 
     @GetMapping("/cmdorderbytotlbyyear")
     public List<CommandeClientStats> getCmdCltByYearByOrderByTotalPrixDesc() {
-      return   this.commandeClientService.CmdCltByYearByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+      return   this.commandeClientService.CmdCltByYearByOrderByTotalPrixDesc(identreprise);
     }
 
     /**
@@ -317,7 +324,8 @@ public class CommandeClientController {
 
     @GetMapping("/cmdorderbytotlbylastyear")
     public List<CommandeClientStats> getCmdCltByLastYearByOrderByTotalPrixDesc() {
-       return   this.commandeClientService.CmdCltByLastYearByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+       return   this.commandeClientService.CmdCltByLastYearByOrderByTotalPrixDesc(identreprise);
     }
 
 
@@ -329,7 +337,8 @@ public class CommandeClientController {
 
     @GetMapping("/cmdorderbytotlbyday")
     public List<CommandeClientStats> getCmdCltByDayByOrderByTotalPrixDesc() {
-        return  this.commandeClientService.CmdCltByDayByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+        return  this.commandeClientService.CmdCltByDayByOrderByTotalPrixDesc(identreprise);
 
     }
 
@@ -340,8 +349,10 @@ public class CommandeClientController {
      */
 
     @GetMapping("/cmdorderbytotlbylastday")
+
     public List<CommandeClientStats> getCmdCltByLastDayByOrderByTotalPrixDesc() {
-       return  this.commandeClientService.CmdCltByLastDayByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+       return  this.commandeClientService.CmdCltByLastDayByOrderByTotalPrixDesc(identreprise);
     }
 
         /************************************************************ Top articles *****************************************************************************/

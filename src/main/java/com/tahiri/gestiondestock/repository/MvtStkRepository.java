@@ -25,8 +25,8 @@ public interface MvtStkRepository  extends JpaRepository<MvtStk ,Integer> {
     List<MvtStk> findAllGroupByIdArticle();
 
 
-    @Query("SELECT m FROM MvtStk m WHERE m.article.designation LIKE %:name% GROUP BY m.article.id")
-    Page<MvtStk> findAllGroupByIdArticleContaining(@Param("name") String name, Pageable pageable);
+    @Query("SELECT DISTINCT m FROM MvtStk m WHERE m.article.designation LIKE %:name% AND m.idEntreprise = :identreprise GROUP BY m.article.id")
+    Page<MvtStk> findAllGroupByIdArticleContainingAndIdEntreprise(@Param("name") String name,@Param("identreprise") Integer identreprise,  Pageable pageable);
 
     MvtStk findByIdLignefrsclt(Integer idLignefrsclt);
 }

@@ -41,7 +41,9 @@ public class Client extends AbstractEntity{
     @OneToMany
     private List<Photo> photos;
 
-
+    public boolean hasIdentreprise() {
+        return idEntreprise != null ;
+    }
 
 
 }

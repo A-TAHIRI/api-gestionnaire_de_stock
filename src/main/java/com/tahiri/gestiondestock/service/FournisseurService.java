@@ -12,6 +12,7 @@ import com.tahiri.gestiondestock.repository.CommandeFournisseurRepository;
 import com.tahiri.gestiondestock.repository.FournisseurRepository;
 import com.tahiri.gestiondestock.validator.FournisseurValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class FournisseurService {
     private FournisseurRepository fournisseurRepository;
     @Autowired
     private CommandeFournisseurRepository commandeFournisseurRepository;
+
 
     public Fournisseur save(Fournisseur fournisseur) {
         List<String> errors = FournisseurValidator.validate(fournisseur);
@@ -81,7 +83,8 @@ public class FournisseurService {
      * @return
      */
     public Page<Fournisseur> getfournisseur(String nom, int page, int size){
-        return fournisseurRepository.findByNomContaining(nom,of(page,size));
+        String identreprise = MDC.get("idEntreprise");
+        return fournisseurRepository.findByNomContainingAndIdEntreprise(nom,Integer.valueOf(identreprise),of(page,size));
     }
 
 
@@ -91,7 +94,8 @@ public class FournisseurService {
      */
 
     public int countFournisseurBymouth(){
-        return this.fournisseurRepository.countFournisseursByMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.fournisseurRepository.countFournisseursByMonthAndYear(identreprise);
     }
 
     /**
@@ -100,7 +104,8 @@ public class FournisseurService {
      */
 
     public int countFournisseuByThisMouth(){
-        return this.fournisseurRepository.countFournisseursByThisMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.fournisseurRepository.countFournisseursByThisMonthAndYear(identreprise);
     }
 
 
@@ -109,7 +114,8 @@ public class FournisseurService {
      * @return
      */
     public int countFournisseuByYear(){
-        return this.fournisseurRepository.countFournisseursByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.fournisseurRepository.countFournisseursByYear(identreprise);
     }
 
     /**
@@ -117,7 +123,8 @@ public class FournisseurService {
      * @return
      */
     public int countFournisseuByLastYear(){
-        return this.fournisseurRepository.countFournisseursByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.fournisseurRepository.countFournisseursByLastYear(identreprise);
     }
 
 
@@ -127,16 +134,18 @@ public class FournisseurService {
      * @return
      */
     public int countFournisseuByDay(){
-        return this.fournisseurRepository.countFournisseursByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.fournisseurRepository.countFournisseursByDay(identreprise);
     }
     /**
      * Service qui retourne le nombre des fournisseur d'hier
      * @return
      */
     public int countFournisseuByLastDay(){
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.fournisseurRepository.countUtilisateursByYesterday(yesterdayTimestamp);
+        return this.fournisseurRepository.countFournisseursByYesterday(yesterdayTimestamp,identreprise);
     }
 
 

@@ -15,13 +15,15 @@ import com.tahiri.gestiondestock.service.ApplicationUserDetailService;
 import com.tahiri.gestiondestock.service.EntrepriseService;
 import com.tahiri.gestiondestock.service.RoleService;
 import com.tahiri.gestiondestock.service.UtilisateurService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -60,6 +62,7 @@ private  RoleService roleService;
         if (!passwordEncoder.matches(authRequestDto.getMdp(), userDetails.getMdp())){
             throw new WsException(HttpStatus.NOT_FOUND, "Le mot de passe ou ...");
         }
+
         // 3- générer le token
         /*String token;
         do {
@@ -68,8 +71,8 @@ private  RoleService roleService;
         // il va sortir de la boucle lorsque le token n'existe pas
         // 4- Associer le token à l'utilisateur
         Utilisateur utilisateur = (Utilisateur) userDetails;
-        // user.setToken(TokenManager.generateToken(userService)); // supprimer l'ancien pour générer un nouvel
-        // userService.saveToken(user.getId(), user.getToken()); // modifier le token dans la base de donnée
+         utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService)); // supprimer l'ancien pour générer un nouvel
+         applicationUserDetailService.saveToken(utilisateur.getId(), utilisateur.getToken()); // modifier le token dans la base de donnée
         // 5- renvoyer le token
         Map<String, String> response = new HashMap<>();
         response.put("token",  JwtsTokenGenerate.generateToken(utilisateur.getToken()));
@@ -126,11 +129,23 @@ private  RoleService roleService;
 
         utilisateur.setRoles( List.of(roleService.addRole("USER"))) ;
         utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService));
+
+
         utilisateurService.save(utilisateur);
         return new UtilisateurDto(utilisateur);
 
     }
 
+    @GetMapping("/email")
+    public UtilisateurDto utilisateurByEmail(@RequestParam String email){
+        return  new UtilisateurDto(utilisateurService.getByEmail(email)) ;
 
+    }
 
+    @GetMapping("/token")
+    public UtilisateurDto utilisateurByToken(@RequestParam String token) throws Exception {
+      String  tokenn = JwtsTokenGenerate.readToken(token);
+        return new UtilisateurDto( applicationUserDetailService.findByToken(tokenn)) ;
+
+    }
 }

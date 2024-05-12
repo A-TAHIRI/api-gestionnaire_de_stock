@@ -9,6 +9,7 @@ import com.tahiri.gestiondestock.repository.RolesRepository;
 import com.tahiri.gestiondestock.service.RoleService;
 import com.tahiri.gestiondestock.service.UtilisateurService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping(UTILISATEUR_ENDPOINT)
 @CrossOrigin(origins = {"http://localhost:4200", "https://monsite.fr"})
+
 public class UtilisateurController {
     @Autowired
     private UtilisateurService utilisateurService;
@@ -35,6 +37,7 @@ public class UtilisateurController {
 
     @Autowired
     private RolesRepository rolesRepository;
+
 
 
     /**
@@ -70,11 +73,14 @@ public class UtilisateurController {
      * @param email
      * @return
      */
+    /*
     @GetMapping("/email/{email}")
     public UtilisateurDto utilisateurByEmail(@PathVariable String email){
         return  new UtilisateurDto(utilisateurService.getByEmail(email)) ;
 
     }
+    */
+
 
     /**
      * enregistrer un utilisateur dans la bdd

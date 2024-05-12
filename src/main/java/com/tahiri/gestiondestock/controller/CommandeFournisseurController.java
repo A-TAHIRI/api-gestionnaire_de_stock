@@ -9,6 +9,7 @@ import com.tahiri.gestiondestock.model.CommandeClientStats;
 import com.tahiri.gestiondestock.model.CommandeFournisseur;
 import com.tahiri.gestiondestock.model.LigneCommandeFournisseur;
 import com.tahiri.gestiondestock.service.CommandeFournisseurService;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -260,8 +261,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbymoth")
     public List<CommandeClientStats>getCmdFrsByMonthByOrderByTotalPrixDesc(){
-
-       return commandeFournisseurService.CmdFrsByMonthByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+       return commandeFournisseurService.CmdFrsByMonthByOrderByTotalPrixDesc(identreprise);
 
     }
     /**
@@ -271,7 +272,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbylastmoth")
     public List<CommandeClientStats> getCmdFrsByLastMonthByOrderByTotalPrixDesc() {
-        return commandeFournisseurService.CmdFrsByLastMonthByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+        return commandeFournisseurService.CmdFrsByLastMonthByOrderByTotalPrixDesc(identreprise);
 
     }
     /**
@@ -281,8 +283,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbyyear")
     public List<CommandeClientStats> getCmdFrsByYearByOrderByTotalPrixDesc(){
-
-      return   commandeFournisseurService.CmdFrsByYearByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+      return   commandeFournisseurService.CmdFrsByYearByOrderByTotalPrixDesc(identreprise);
 
     }
     /**
@@ -292,7 +294,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbylastyear")
     public List<CommandeClientStats> getCmdFrsByLastYearByOrderByTotalPrixDesc(){
-        return commandeFournisseurService.CmdFrsByLastYearByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+        return commandeFournisseurService.CmdFrsByLastYearByOrderByTotalPrixDesc(identreprise);
 
     }
 
@@ -304,8 +307,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbyday")
     public List<CommandeClientStats> getCmdFrsByDayByOrderByTotalPrixDesc(){
-
-        return commandeFournisseurService.CmdFrsByDayByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+        return commandeFournisseurService.CmdFrsByDayByOrderByTotalPrixDesc(identreprise);
 
 
     }
@@ -316,8 +319,8 @@ public class CommandeFournisseurController {
 
     @GetMapping("/cmdorderbytotlbylastday")
     public List<CommandeClientStats> getCmdFrsByLastDayByOrderByTotalPrixDesc(){
-
-        return   commandeFournisseurService.CmdFrsByLastDayByOrderByTotalPrixDesc();
+        String identreprise = MDC.get("idEntreprise");
+        return   commandeFournisseurService.CmdFrsByLastDayByOrderByTotalPrixDesc(identreprise);
 
 
     }

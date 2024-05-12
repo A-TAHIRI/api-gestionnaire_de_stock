@@ -3,9 +3,14 @@ package com.tahiri.gestiondestock.controller;
 
 import com.tahiri.gestiondestock.dto.ClientDto;
 import com.tahiri.gestiondestock.dto.UtilisateurDto;
+import com.tahiri.gestiondestock.interceptor.Interceptor;
 import com.tahiri.gestiondestock.model.Client;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.service.ClientService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +24,12 @@ import static com.tahiri.gestiondestock.utils.constant.CLIENT_ENDPOINT;
 @RestController
 @RequestMapping(CLIENT_ENDPOINT)
 @CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
+@Slf4j
 public class ClientController {
     @Autowired
     private ClientService clientService;
-
+    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+    String identreprise = MDC.get("idEntreprise");
 
     /**
      * recupirer tous les clients
@@ -114,7 +121,8 @@ public class ClientController {
 
     @GetMapping("/bymonth")
     public int getByMonth(){
-        return clientService.countClientBymouth();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientBymouth(identreprise);
     }
     /**
      * retourn le nombre des client dans le mois president
@@ -123,7 +131,8 @@ public class ClientController {
 
     @GetMapping("/bythismonth")
     public int getByThisMonth(){
-        return clientService.countClientByThisMouth();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientByThisMouth(identreprise);
     }
 
     /**
@@ -133,7 +142,8 @@ public class ClientController {
 
     @GetMapping("/byyear")
     public int getByYear(){
-        return clientService.countClientByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientByYear(identreprise);
     }
     /**
      * retourn le nombre des client dans l'anné président
@@ -142,7 +152,8 @@ public class ClientController {
 
     @GetMapping("/bylastyear")
     public int getByLastYear(){
-        return clientService.countClientByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientByLastYear(identreprise);
     }
 
 
@@ -153,7 +164,8 @@ public class ClientController {
 
     @GetMapping("/byday")
     public int getByDay(){
-        return clientService.countClientByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientByDay(identreprise);
     }
     /**
      * retourn le nombre des client le jour président
@@ -162,6 +174,7 @@ public class ClientController {
 
     @GetMapping("/bylastday")
     public int getByLastDay(){
-        return clientService.countClientByLastDay();
+        String identreprise = MDC.get("idEntreprise");
+        return clientService.countClientByLastDay(identreprise);
     }
 }

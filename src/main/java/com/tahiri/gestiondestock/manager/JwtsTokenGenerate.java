@@ -6,13 +6,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
 import javax.crypto.SecretKey;
 import java.util.Calendar;
+
 
 /**
  * Cette classe va nous permettre de générer un token et récupérer sa valeur
  */
 public class JwtsTokenGenerate {
+
+
+
+
 
     /**
      * Methode qui va nous permettre de generer un token <br>

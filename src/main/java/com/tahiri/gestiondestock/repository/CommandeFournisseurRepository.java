@@ -21,7 +21,7 @@ public interface CommandeFournisseurRepository extends JpaRepository<CommandeFou
 
     List<CommandeFournisseur> findByFournisseur_Id(Integer id);
 
-    Page<CommandeFournisseur> findByReferenceContaining(String nom, Pageable pageable);
+    Page<CommandeFournisseur> findByReferenceContainingAndIdEntreprise(String nom,Integer identreprise, Pageable pageable);
 
     @Query("SELECT f.etatCommande FROM CommandeFournisseur f WHERE f.id = :id")
     String findEtatCommandeById(@Param("id") Integer id);
@@ -32,139 +32,139 @@ public interface CommandeFournisseurRepository extends JpaRepository<CommandeFou
      * mois président
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1)")
-    int countCommandeFournisseursByMonthAndYear();
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1) AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByMonthAndYear(@Param("identreprise") String identreprise);
 
 
     /**
      * mois actuel
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE )")
-    int countCommandeFournisseursByThisMonthAndYear();
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE ) AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByThisMonthAndYear(@Param("identreprise") String identreprise);
 
     /**
      *cette année
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE)")
-    int countCommandeFournisseursByYear();
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByYear(@Param("identreprise") String identreprise);
 
     /**
      * année président
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1)")
-    int countCommandeFournisseursByLastYear();
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1) AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByLastYear(@Param("identreprise") String identreprise);
 
 
     /**
      * aujour'huit
      * @return
      */
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND DATE(u.createDate) = CURRENT_DATE")
-    int countCommandeFournisseursByDay();
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND DATE(u.createDate) = CURRENT_DATE AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByDay(@Param("identreprise") String identreprise);
 
     /**
      * hier
      * @return
      */
 
-    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE  YEAR(u.createDate) = YEAR(CURRENT_DATE) AND DATE(u.createDate) = :yesterdayDate")
-    int countCommandeFournisseursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate);
+    @Query("SELECT COALESCE(COUNT(u),0) FROM CommandeFournisseur u WHERE  YEAR(u.createDate) = YEAR(CURRENT_DATE) AND DATE(u.createDate) = :yesterdayDate AND u.idEntreprise = :identreprise")
+    int countCommandeFournisseursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate,@Param("identreprise") String identreprise);
 
 
-    /********************************************* revenue ********************************************************************************************************/
+    /********************************************* DEPENCE ********************************************************************************************************/
 
     /**
      * mois président
      * @return
      */
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1)")
-    int sumCommandeFournisseursByLastMonthAndYear();
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = (MONTH(CURRENT_DATE )-1) AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByLastMonthAndYear(@Param("identreprise") String identreprise);
 
 
     /**
      * mois actuel
      * @return
      */
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE )")
-    int sumCommandeFournisseursByMonthAndYear();
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND MONTH(u.createDate) = MONTH(CURRENT_DATE ) AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByMonthAndYear(@Param("identreprise") String identreprise);
 
     /**
      *cette année
      * @return
      */
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE)")
-    int sumCommandeFournisseursByYear();
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE YEAR(u.createDate) = YEAR(CURRENT_DATE) AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByYear(@Param("identreprise") String identreprise);
 
     /**
      * année président
      * @return
      */
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE   YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1)")
-    int sumCommandeFournisseursByLastYear();
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE   YEAR(u.createDate) = (YEAR(CURRENT_DATE)-1) AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByLastYear(@Param("identreprise") String identreprise);
 
 
     /**
      * aujour'huit
      * @return
      */
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE  DATE(u.createDate) = CURRENT_DATE")
-    int sumCommandeFournisseursByDay();
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0) FROM CommandeFournisseur u WHERE  DATE(u.createDate) = CURRENT_DATE AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByDay(@Param("identreprise") String identreprise);
 
     /**
      * hier
      * @return
      */
 
-    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE   DATE(u.createDate) = :yesterdayDate")
-    int sumCommandeFournisseursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate);
+    @Query("SELECT COALESCE(SUM(u.totalPrix),0)  FROM CommandeFournisseur u WHERE   DATE(u.createDate) = :yesterdayDate AND u.idEntreprise = :identreprise")
+    int sumCommandeFournisseursByYesterday(@Param("yesterdayDate") Timestamp yesterdayDate,@Param("identreprise") String identreprise);
 
 
-/***************************************** CMASEMENT DES COMMANDE PAR ORDER DESC DE TOTALPRIX ***************************************************/
+/***************************************** CLASEMENT DES COMMANDE PAR ORDER DESC DE TOTALPRIX ***************************************************/
 
     /**
      *Les commande fournisseur par order dec pour le mois actuel
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = MONTH(CURRENT_DATE )   ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByMonthByOrderByTotalPrixDesc();
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = MONTH(CURRENT_DATE ) AND c.idEntreprise = :identreprise  ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByMonthByOrderByTotalPrixDesc(@Param("identreprise") String identreprise);
 
 
     /**
      *Les commande fournisseur par order dec pour le mois president
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = (MONTH(CURRENT_DATE )-1)   ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByLastMonthByOrderByTotalPrixDesc();
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND MONTH(c.createDate) = (MONTH(CURRENT_DATE )-1) AND c.idEntreprise = :identreprise  ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByLastMonthByOrderByTotalPrixDesc(@Param("identreprise") String identreprise);
 
     /**
      *Les commande fournisseur par order dec pour l'année actuel
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE)   ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByYearByOrderByTotalPrixDesc();
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND c.idEntreprise = :identreprise  ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByYearByOrderByTotalPrixDesc(@Param("identreprise") String identreprise);
 
     /**
      *Les commande fournisseur par order dec pour l'année president
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = (YEAR(CURRENT_DATE)-1)   ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByLastYearByOrderByTotalPrixDesc();
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = (YEAR(CURRENT_DATE)-1)  AND c.idEntreprise = :identreprise  ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByLastYearByOrderByTotalPrixDesc(@Param("identreprise") String identreprise);
 
     /**
      *Les commande fournisseur par order dec pour ajourd'huit
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND  DATE(c.createDate) = CURRENT_DATE  ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByDayByOrderByTotalPrixDesc();
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND  DATE(c.createDate) = CURRENT_DATE AND c.idEntreprise = :identreprise  ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByDayByOrderByTotalPrixDesc(@Param("identreprise") String identreprise);
 
 
     /**
      *Les commande fournisseur par order dec pour hier
      * @return
      */
-    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND  DATE(c.createDate) = :yesterdayDate  ORDER BY c.totalPrix DESC LIMIT 5")
-    List<CommandeFournisseur> findCmdFrsByLastDayByOrderByTotalPrixDesc(@Param("yesterdayDate") Timestamp yesterdayDate);
+    @Query("SELECT c FROM CommandeFournisseur c WHERE YEAR(c.createDate) = YEAR(CURRENT_DATE) AND  DATE(c.createDate) = :yesterdayDate  AND c.idEntreprise = :identreprise ORDER BY c.totalPrix DESC LIMIT 5")
+    List<CommandeFournisseur> findCmdFrsByLastDayByOrderByTotalPrixDesc(@Param("yesterdayDate") Timestamp yesterdayDate,@Param("identreprise") String identreprise);
 }

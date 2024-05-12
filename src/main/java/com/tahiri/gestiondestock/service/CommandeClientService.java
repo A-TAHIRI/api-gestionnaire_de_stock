@@ -12,8 +12,10 @@ import com.tahiri.gestiondestock.validator.CommandeClientValidator;
 import com.tahiri.gestiondestock.validator.LigneCommadeClientValidator;
 import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -37,7 +39,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Service
 @Slf4j
 public class CommandeClientService {
-
+    String identreprise = MDC.get("idEntreprise");
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -376,7 +378,8 @@ public class CommandeClientService {
      * @return
      */
     public Page<CommandeClient> getcommandes(String nom, int page, int size) {
-        return commandeClientRepository.findByReferenceContaining(nom, of(page, size));
+        String identreprise = MDC.get("idEntreprise");
+        return commandeClientRepository.findByReferenceContainingAndIdEntreprise(nom,Integer.valueOf(identreprise), of(page, size));
     }
 
 
@@ -390,7 +393,8 @@ public class CommandeClientService {
      */
 
     public int countCommandeClientBymouth() {
-        return this.commandeClientRepository.countCommandeClientsByMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.countCommandeClientsByMonthAndYear(identreprise);
     }
 
     /**
@@ -400,7 +404,8 @@ public class CommandeClientService {
      */
 
     public int countCommandeClientByThisMouth() {
-        return this.commandeClientRepository.countCommandeClientsByThisMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.countCommandeClientsByThisMonthAndYear(identreprise);
     }
 
 
@@ -410,7 +415,8 @@ public class CommandeClientService {
      * @return
      */
     public int countCommandeClientByYear() {
-        return this.commandeClientRepository.countCommandeClientsByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.countCommandeClientsByYear(identreprise);
     }
 
     /**
@@ -419,7 +425,8 @@ public class CommandeClientService {
      * @return
      */
     public int countCommandeClientByLastYear() {
-        return this.commandeClientRepository.countCommandeClientsByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.countCommandeClientsByLastYear(identreprise);
     }
 
 
@@ -429,7 +436,8 @@ public class CommandeClientService {
      * @return
      */
     public int countCommandeClientByDay() {
-        return this.commandeClientRepository.countCommandeClientsByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.countCommandeClientsByDay(identreprise);
     }
 
     /**
@@ -438,9 +446,10 @@ public class CommandeClientService {
      * @return
      */
     public int countCommandeClientByLastDay() {
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
-        return this.commandeClientRepository.countCommandeClientsByYesterday(yesterdayTimestamp);
+        return this.commandeClientRepository.countCommandeClientsByYesterday(yesterdayTimestamp,identreprise);
     }
 
 
@@ -454,7 +463,8 @@ public class CommandeClientService {
      */
 
     public int sumCommandeClientBymouth() {
-        return this.commandeClientRepository.sumCommandeClientsByMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.sumCommandeClientsByMonthAndYear(identreprise);
     }
 
     /**
@@ -464,7 +474,8 @@ public class CommandeClientService {
      */
 
     public int sumCommandeClientByLastMouth() {
-        return this.commandeClientRepository.sumCommandeClientsByLastMonthAndYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.sumCommandeClientsByLastMonthAndYear(identreprise);
     }
 
 
@@ -474,7 +485,8 @@ public class CommandeClientService {
      * @return
      */
     public int sumCommandeClientByYear() {
-        return this.commandeClientRepository.sumCommandeClientsByYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.sumCommandeClientsByYear(identreprise);
     }
 
     /**
@@ -483,7 +495,8 @@ public class CommandeClientService {
      * @return
      */
     public int sumCommandeClientByLastYear() {
-        return this.commandeClientRepository.sumCommandeClientsByLastYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.sumCommandeClientsByLastYear(identreprise);
     }
 
 
@@ -493,7 +506,8 @@ public class CommandeClientService {
      * @return
      */
     public int sumCommandeClientByDay() {
-        return this.commandeClientRepository.sumCommandeClientsByDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.commandeClientRepository.sumCommandeClientsByDay(identreprise);
     }
 
     /**
@@ -502,10 +516,11 @@ public class CommandeClientService {
      * @return
      */
     public int sumCommandeClientByLastDay() {
+        String identreprise = MDC.get("idEntreprise");
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
 
-        return this.commandeClientRepository.sumCommandeClientsByYesterday(yesterdayTimestamp);
+        return this.commandeClientRepository.sumCommandeClientsByYesterday(yesterdayTimestamp,identreprise);
     }
 
 
@@ -518,7 +533,7 @@ public class CommandeClientService {
      */
 
     @Transactional
-    public List<CommandeClientStats> CmdCltByMonthByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByMonthByOrderByTotalPrixDesc( String identreprise) {
 
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
@@ -530,12 +545,13 @@ public class CommandeClientService {
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
                 + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
-                + "AND MONTH(c.create_date) = MONTH(CURRENT_DATE) "
+                + "AND MONTH(c.create_date) = MONTH(CURRENT_DATE) AND l.identreprise = :identreprise   "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -549,7 +565,8 @@ public class CommandeClientService {
      * @return
      */
 
-    public List<CommandeClientStats> CmdCltByLastMonthByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByLastMonthByOrderByTotalPrixDesc( String identreprise) {
+
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
@@ -560,12 +577,13 @@ public class CommandeClientService {
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
                 + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
-                + "AND MONTH(c.create_date) = (MONTH(CURRENT_DATE)-1) "
+                + "AND MONTH(c.create_date) = (MONTH(CURRENT_DATE)-1) AND l.identreprise = :identreprise   "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -577,7 +595,8 @@ public class CommandeClientService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdCltByYearByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByYearByOrderByTotalPrixDesc( String identreprise) {
+
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
@@ -587,12 +606,13 @@ public class CommandeClientService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND l.identreprise = :identreprise   "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise",identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -604,7 +624,8 @@ public class CommandeClientService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdCltByLastYearByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByLastYearByOrderByTotalPrixDesc( String identreprise) {
+
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
@@ -614,11 +635,12 @@ public class CommandeClientService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
-                + "WHERE YEAR(c.create_date) = (YEAR(CURRENT_DATE)-1) "
+                + "WHERE YEAR(c.create_date) = (YEAR(CURRENT_DATE)-1) AND l.identreprise = :identreprise  "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise",identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -630,7 +652,7 @@ public class CommandeClientService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdCltByDayByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByDayByOrderByTotalPrixDesc(String identreprise) {
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
                 + "GROUP_CONCAT(ar.designation ) "
                 + "FROM commande_client c "
@@ -640,11 +662,12 @@ public class CommandeClientService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = CURRENT_DATE  "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND DATE(c.create_date) = CURRENT_DATE  AND l.identreprise = :identreprise   "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -656,7 +679,8 @@ public class CommandeClientService {
      *
      * @return
      */
-    public List<CommandeClientStats> CmdCltByLastDayByOrderByTotalPrixDesc() {
+    public List<CommandeClientStats> CmdCltByLastDayByOrderByTotalPrixDesc( String identreprise) {
+
         LocalDate yesterdayDate = LocalDate.now().minusDays(1);
         Timestamp yesterdayTimestamp = Timestamp.valueOf(yesterdayDate.atStartOfDay());
         String sql = "SELECT c.id AS idCommande, clt.prenom , clt.nom, c.etatCommande AS status, c.total_prix AS total, "
@@ -668,12 +692,13 @@ public class CommandeClientService {
                 + "ON l.idarticle = ar.id "
                 + "JOIN client clt "
                 + "ON c.idclient = clt.id "
-                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = '" + yesterdayTimestamp + "' "
+                + "WHERE YEAR(c.create_date) = YEAR(CURRENT_DATE) AND  DATE(c.create_date) = '" + yesterdayTimestamp + "'  AND l.identreprise = :identreprise   "
                 + "GROUP BY c.id "
                 + "ORDER BY total DESC LIMIT 5 ";
 
         List<CommandeClientStats> resultList = new ArrayList<>();
         entityManager.createNativeQuery(sql, CommandeClientStats.class)
+                .setParameter("identreprise", identreprise)
                 .getResultList()
                 .forEach(elm -> resultList.add((CommandeClientStats) elm));
         return resultList;
@@ -689,7 +714,8 @@ public class CommandeClientService {
      * @return
      */
     public List<ArticleStats> getTopArticlesByCommandesToDay() {
-        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToDay();
+        String identreprise = MDC.get("idEntreprise");
+        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToDay(identreprise);
     }
 
 
@@ -701,7 +727,8 @@ public class CommandeClientService {
 
 
     public List<ArticleStats> getTopArticlesByCommandesToMonth() {
-        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToMonth();
+        String identreprise = MDC.get("idEntreprise");
+        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToMonth(identreprise);
     }
 
     /**
@@ -710,7 +737,8 @@ public class CommandeClientService {
      * @return
      */
     public List<ArticleStats> getTopArticlesByCommandesToYear() {
-        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToYear();
+        String identreprise = MDC.get("idEntreprise");
+        return this.ligneCommandeClientRepository.findTopArticlesByCommandesToYear(identreprise);
     }
 
 }

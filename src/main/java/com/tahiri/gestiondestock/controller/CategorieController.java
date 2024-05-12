@@ -27,7 +27,7 @@ public class CategorieController {
      * method pour récupirer tous les categories
      * @return
      */
-    /*
+
     @GetMapping("")
     public List<CategorieDto> touLescategiries(){
         List<Categorie> list= categorieService.getAll();
@@ -39,7 +39,7 @@ public class CategorieController {
         return dtoList;
     }
 
-*/
+
     /**
      * method pour recupirer une categorie
      * @param id

@@ -124,7 +124,7 @@ public class CommandeClientService {
                                     ligCmdClt.setPrixUnitaire(ligCmdClt.getPrixUnitaire());
                                     ligCmdClt.setQuantite(ligCmdClt.getQuantite());
                                     ligCmdClt.setIdEntreprise(ligCmdClt.getIdEntreprise());
-                                    ligCmdClt.setLastModifiedDate(new Date());
+                                    ligCmdClt.setLastModifiedDate(Instant.now());
                                   this.ligneCommandeClientRepository.save(ligCmdClt);
                                   mvtStk.setId(mvtStk.getId());
                                   mvtStk.setTypeMvt(mvtStk.getTypeMvt());
@@ -134,7 +134,7 @@ public class CommandeClientService {
                                   mvtStk.setQuantite(ligCmdClt.getQuantite());
                                   mvtStk.setIdEntreprise(mvtStk.getIdEntreprise());
                                   mvtStk.setIdLignefrsclt(mvtStk.getIdLignefrsclt());
-                                  mvtStk.setLastModifiedDate(new Date());
+                                  mvtStk.setLastModifiedDate(Instant .now());
                               mvtStkService.sortieStock(mvtStk);
                                 }
                             } }else {

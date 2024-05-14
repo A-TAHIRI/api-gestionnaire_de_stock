@@ -9,7 +9,6 @@ import com.tahiri.gestiondestock.model.*;
 import com.tahiri.gestiondestock.repository.ArticleRepository;
 import com.tahiri.gestiondestock.repository.LigneCommandeClientRepository;
 import com.tahiri.gestiondestock.repository.LigneCommandeFournisseurRepository;
-import com.tahiri.gestiondestock.repository.LigneVenteRepository;
 import com.tahiri.gestiondestock.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -29,8 +28,7 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    @Autowired
-    private LigneVenteRepository ligneVenteRepository;
+
 
     @Autowired
     private LigneCommandeClientRepository ligneCommandeClientRepository;
@@ -80,9 +78,7 @@ public class ArticleService {
              );
  }
 
- public  List<LigneVente> findHistoriqueVentes(Integer idArticle){
-        return ligneVenteRepository.findLigneVenteByArticle_Id(idArticle);
- }
+
 
 public  List<LigneCommandeClient> findHistoriqueCommandeClient(Integer idArticle){
         return ligneCommandeClientRepository.findLigneCommandeClientByArticle_Id(idArticle);
@@ -110,11 +106,6 @@ public  List<LigneCommandeClient> findHistoriqueCommandeClient(Integer idArticle
             throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des commandes client", ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
 
-        List<LigneVente> ligneVentes = ligneVenteRepository.findByArticle_Id(id);
-        if (!ligneVentes.isEmpty()) {
-            throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des ventes",
-                    ErrorCodes.ARTICLE_ALREADY_IN_USE);
-        }
         articleRepository.deleteById(id);
     }
     /**

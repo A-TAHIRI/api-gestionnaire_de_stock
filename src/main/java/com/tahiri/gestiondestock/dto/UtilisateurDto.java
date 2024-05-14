@@ -7,6 +7,7 @@ import com.tahiri.gestiondestock.model.Utilisateur;
 
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ public class UtilisateurDto {
     private  String photo;
     private  String email;
     private  String numTel;
-    private Date dateDeNaissance;
+    private Instant dateDeNaissance;
     private String mdp;
     private String token;
     private EntrepriseDto entreprise;

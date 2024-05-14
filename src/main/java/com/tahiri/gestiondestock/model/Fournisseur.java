@@ -42,7 +42,5 @@ public class Fournisseur extends AbstractEntity {
     @OneToMany
     private List<Photo> photos;
 
-    public boolean hasIdentreprise() {
-        return idEntreprise != null ;
-    }
+
 }

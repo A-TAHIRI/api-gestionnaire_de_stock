@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Utilisateur extends  AbstractEntity  implements UserDetails {
     private  String numTel;
 
     @Column(name = "datedenaissance")
-    private Date dateDeNaissance;
+    private Instant dateDeNaissance;
 
     @Column(name = "mdp")
     private String mdp;

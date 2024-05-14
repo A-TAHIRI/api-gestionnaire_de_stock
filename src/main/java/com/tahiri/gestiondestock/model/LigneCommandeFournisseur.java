@@ -33,8 +33,6 @@ public class LigneCommandeFournisseur extends  AbstractEntity {
     @JoinColumn(name = "idcommandeFournisseur")
     private  CommandeFournisseur commandeFournisseur;
 
-    public boolean hasIdentreprise() {
-        return idEntreprise != null ;
-    }
+
 
 }

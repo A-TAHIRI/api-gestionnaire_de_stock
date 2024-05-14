@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +64,7 @@ public class EntrepriseService {
           utilisateur.setEmail(entreprise.getEmail());
           utilisateur.setNom(entreprise.getNom());
           utilisateur.setPrenom(entreprise.getCodeFiscal());
-          utilisateur.setDateDeNaissance(new Date());
+          utilisateur.setDateDeNaissance(Instant.now());
           utilisateur.setMdp(generateRandomPassword());
           utilisateur.setNumTel(entreprise.getNumTel());
           utilisateur.setRoles(List.of(roleService.addRole("ADMIN")));

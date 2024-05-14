@@ -39,8 +39,8 @@ public class SecurityConfigurer {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.POST, "/generateToken", "/register","/login").permitAll() // pour le generateToken pour toute les personnes ont accées
-                        .requestMatchers("/api/**").hasAnyAuthority("ADMIN", "USER") // seulement pour les ADMIN
-                        //.requestMatchers("/api/user/**").hasAnyAuthority("USER") // seulement pour les ADMIN
+                        .requestMatchers("/api/v1/articles/**","/api/v1/clients/**","/api/v1/fournisseurs/**","/api/v1/commandesclient/**","/api/v1/commandesfournisseur/**").hasAnyAuthority( "ADMIN","USER") // seulement pour les ADMIN et USER
+                        .requestMatchers("/api/v1/utilisateurs/**","/api/v1/categories/**").hasAnyAuthority("ADMIN") // seulement pour les ADMIN
                         .anyRequest().permitAll()
 
 

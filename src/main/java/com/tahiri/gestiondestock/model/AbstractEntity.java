@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 
 
@@ -22,16 +23,14 @@ public class AbstractEntity implements Serializable {
     private  Integer id;
 
     @CreatedDate
-    @Column(name ="createDate",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false, updatable = false)
-    private Date createDate;
+    @Column(name ="createDate", nullable = false, updatable = false)
+    private Instant createDate;
 
     @LastModifiedDate
     @Column(name="lastModifiedDate")
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
 
 
-    public  AbstractEntity(){
-        this.createDate= new Date();
-    }
+
 }

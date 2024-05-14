@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static org.springframework.data.domain.PageRequest.of;
 
@@ -49,9 +50,15 @@ public class UtilisateurService{
         if(!utilisateur.getEmail().contains(".")) {
             throw  new RuntimeException("Votre mail invalide");
         }
+        if (!(StringUtils.hasLength(utilisateur.getMdp()) && utilisateur.getMdp().length() >= 8)) {
+            throw new RuntimeException("Votre mot de passe doit contenir au moins 8 caractères");
+        }
+        // Vérifier si le mot de passe contient au moins un caractère majuscule et au moins un caractère spécial
+        if (!Pattern.compile("(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).*$").matcher(utilisateur.getMdp()).find()) {
+            throw new RuntimeException("Votre mot de passe doit contenir au moins une lettre majuscule et au moins un caractère spécial");
+        }
 
-
-       utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
+        utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
         return
                 utilisateurRepository.save(utilisateur);
     }

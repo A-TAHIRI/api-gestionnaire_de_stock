@@ -3,6 +3,7 @@ package com.tahiri.gestiondestock.controller;
 
 
 import com.tahiri.gestiondestock.dto.AuthRequestDto;
+import com.tahiri.gestiondestock.dto.ChangerMotDePasseUtilisateurDto;
 import com.tahiri.gestiondestock.dto.UtilisateurDto;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
@@ -16,6 +17,7 @@ import com.tahiri.gestiondestock.service.EntrepriseService;
 import com.tahiri.gestiondestock.service.RoleService;
 import com.tahiri.gestiondestock.service.UtilisateurService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -131,6 +133,7 @@ private  RoleService roleService;
         utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService));
 
 
+
         utilisateurService.save(utilisateur);
         return new UtilisateurDto(utilisateur);
 
@@ -148,4 +151,6 @@ private  RoleService roleService;
         return new UtilisateurDto( applicationUserDetailService.findByToken(tokenn)) ;
 
     }
+
+
 }

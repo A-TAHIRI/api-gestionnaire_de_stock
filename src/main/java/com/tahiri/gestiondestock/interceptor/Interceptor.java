@@ -25,6 +25,7 @@ public class Interceptor implements StatementInspector {
     @Override
     public String inspect(String sql) {
 
+        logger.info("sql avant"+sql);
         // Validez que le SQL commence par "select"
         if (StringUtils.hasLength(sql) && sql.trim().toLowerCase().startsWith("select")) {
             int startIndex = sql.trim().toLowerCase().indexOf("select") + 7;
@@ -37,7 +38,7 @@ public class Interceptor implements StatementInspector {
 
                 // Récupérer `idEntreprise` du MDC
                 String idEntreprise = MDC.get("idEntreprise");
-
+logger.info("identreprise"+idEntreprise);
                 String lowerCaseSql = sql.toLowerCase();
                 String lowerCaseEntity = entityName.toLowerCase();
                 int indexWhere = lowerCaseSql.indexOf("where");
@@ -75,9 +76,13 @@ public class Interceptor implements StatementInspector {
 
             }
         }
+System.out.println("sql apres"+sql);
+
 
         return sql;
     }
+
+
 }
 
 

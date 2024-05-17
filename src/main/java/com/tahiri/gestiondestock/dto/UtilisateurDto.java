@@ -23,7 +23,7 @@ public class UtilisateurDto {
     private  String photo;
     private  String email;
     private  String numTel;
-    private Instant dateDeNaissance;
+    private Date dateDeNaissance;
     private String mdp;
     private String token;
     private EntrepriseDto entreprise;

@@ -76,7 +76,7 @@ public class UtilisateurService{
         return utilisateurRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Aucun utilisateur avec l'ID = " + id + " n' ete trouve dans la BDD",
-                        ErrorCodes.UTILISATEUR_NOT_FOUND)
+        ErrorCodes.UTILISATEUR_NOT_FOUND)
                 );
     }
 
@@ -103,6 +103,7 @@ public class UtilisateurService{
 
     public Utilisateur changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
         validate(dto);
+
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(dto.getId());
         if (utilisateurOptional.isEmpty()) {
             log.warn("Aucun utilisateur n'a ete trouve avec l'ID " + dto.getId());
@@ -139,6 +140,12 @@ public class UtilisateurService{
                     ErrorCodes.UTILISATEUR_CHANGE_PASSWORD_OBJECT_NOT_VALID);
         }
     }
+
+
+
+
+
+
 
     /**
      * Service pour recupirer les utilisateur par page et par recherche

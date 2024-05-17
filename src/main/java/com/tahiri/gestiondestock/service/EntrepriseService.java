@@ -11,6 +11,7 @@ import com.tahiri.gestiondestock.repository.EntrepriseRepository;
 import com.tahiri.gestiondestock.repository.RolesRepository;
 import com.tahiri.gestiondestock.validator.EntrepriseValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,14 +47,16 @@ public class EntrepriseService {
         }
 
         Entreprise savedEntreprise=   entrepriseRepository.save(entreprise);
-
         Utilisateur utilisateur = fromEntreprise(savedEntreprise);
         Utilisateur savedUser = utilisateurService.save(utilisateur);
         savedEntreprise.setUtilisateurs(new ArrayList<>());
         savedEntreprise.getUtilisateurs().add(savedUser); // lien entre entreprise et utilisateur
         savedEntreprise = this.entrepriseRepository.save(entreprise); // sauvegarder
 
+
+
         return  savedEntreprise;
+
     }
 
     private Utilisateur fromEntreprise(Entreprise entreprise) {
@@ -64,7 +67,7 @@ public class EntrepriseService {
           utilisateur.setEmail(entreprise.getEmail());
           utilisateur.setNom(entreprise.getNom());
           utilisateur.setPrenom(entreprise.getCodeFiscal());
-          utilisateur.setDateDeNaissance(Instant.now());
+          utilisateur.setDateDeNaissance(new Date());
           utilisateur.setMdp(generateRandomPassword());
           utilisateur.setNumTel(entreprise.getNumTel());
           utilisateur.setRoles(List.of(roleService.addRole("ADMIN")));
@@ -72,6 +75,7 @@ public class EntrepriseService {
           utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService));
           utilisateur.setPhoto(entreprise.getImage());
           utilisateur.setEntreprise(entreprise);
+
      return  utilisateur;
     }
     private String generateRandomPassword() {

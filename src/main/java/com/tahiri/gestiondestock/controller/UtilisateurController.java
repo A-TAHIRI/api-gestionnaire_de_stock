@@ -126,6 +126,17 @@ public class UtilisateurController {
         return new UtilisateurDto(utilisateurService.save(utilisateur));
     }
 
+    /**
+     * Modifier password
+     * @param dto
+     * @return
+     */
+    @PutMapping("/update/password")
+    Utilisateur changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto){
+
+        return utilisateurService.changerMotDePasse(dto)  ;
+    }
+
     /*
     @PostMapping("/addrole/{id}")
     public  void addrole(@PathVariable Integer id , @RequestBody Role role){
@@ -141,15 +152,7 @@ public class UtilisateurController {
     }
 */
 
-    /**
-     * Modifier password
-     * @param dto
-     * @return
-     */
-    @PutMapping("/update/password")
-    Utilisateur changerMotDePasse(@RequestBody ChangerMotDePasseUtilisateurDto dto){
-        return utilisateurService.changerMotDePasse(dto)  ;
-    }
+
 /*
     @GetMapping("")
     public ResponseEntity<HttpResponse> getUsers(@RequestParam Optional<String> name,

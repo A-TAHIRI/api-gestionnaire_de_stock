@@ -1,5 +1,7 @@
 package com.tahiri.gestiondestock.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,7 +42,7 @@ public class Utilisateur extends  AbstractEntity  implements UserDetails {
     private  String numTel;
 
     @Column(name = "datedenaissance")
-    private Instant dateDeNaissance;
+    private Date dateDeNaissance;
 
     @Column(name = "mdp")
     private String mdp;

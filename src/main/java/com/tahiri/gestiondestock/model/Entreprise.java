@@ -1,5 +1,6 @@
 package com.tahiri.gestiondestock.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -3,6 +3,7 @@ package com.tahiri.gestiondestock.service;
 import com.tahiri.gestiondestock.exception.EntityNotFoundException;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
+import com.tahiri.gestiondestock.exception.InvalidOperationException;
 import com.tahiri.gestiondestock.manager.TokenManager;
 import com.tahiri.gestiondestock.model.Entreprise;
 import com.tahiri.gestiondestock.model.Role;
@@ -43,7 +44,21 @@ public class EntrepriseService {
         List<String> errors = EntrepriseValidator.validate(entreprise);
         if (!errors.isEmpty()) {
             log.error("Entreprise is not valid {}", entreprise);
-            throw new InvalidEntityException("L'entreprise n'est pas valide", ErrorCodes.ENTREPRISE_NOT_VALID, errors);
+            throw new InvalidEntityException(" L'entreprise n'est pas valide ", ErrorCodes.ENTREPRISE_NOT_VALID, errors);
+        }
+        if(entrepriseRepository.findByEmail(entreprise.getEmail()) != null){
+            throw new InvalidOperationException("L'entreprise n'est pas valide: Email "+entreprise.getEmail() +" existe dans la  BD" , ErrorCodes.ENTREPRISE_NOT_VALID);
+        }
+        if(entrepriseRepository.findByNom(entreprise.getNom()) != null){
+            throw new InvalidOperationException("L'entreprise n'est pas valide "+entreprise.getNom()+" existe dans la BD" , ErrorCodes.ENTREPRISE_NOT_VALID);
+        }
+        if(entrepriseRepository.findByCodeFiscal(entreprise.getCodeFiscal()) != null){
+            throw new InvalidOperationException("L'entreprise n'est pas valide "+entreprise.getCodeFiscal()+" existe dans la BD" , ErrorCodes.ENTREPRISE_NOT_VALID);
+        }
+
+
+        if(entrepriseRepository.findByNumTel(entreprise.getNumTel()) != null){
+            throw new InvalidOperationException("L'entreprise n'est pas valide "+entreprise.getNumTel()+" existe dans la BD" , ErrorCodes.ENTREPRISE_NOT_VALID);
         }
 
         Entreprise savedEntreprise=   entrepriseRepository.save(entreprise);

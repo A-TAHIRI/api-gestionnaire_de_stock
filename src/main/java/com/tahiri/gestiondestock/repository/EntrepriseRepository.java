@@ -6,4 +6,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EntrepriseRepository extends JpaRepository<Entreprise, Integer> {
+    Entreprise findByEmail(String email);
+
+    Entreprise findByCodeFiscal(String codeFiscal);
+
+    Entreprise findByNumTel(String numTel);
+
+    Entreprise findByNom(String nom);
 }

@@ -23,7 +23,6 @@ import static com.tahiri.gestiondestock.utils.constant.COMMADE_FOURNISSEUR_ENDPO
 
 @RestController
 @RequestMapping(COMMADE_FOURNISSEUR_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class CommandeFournisseurController {
 
 
@@ -98,6 +97,11 @@ public class CommandeFournisseurController {
         return  new CommandeFournisseurDto(commandeFournisseurService.save(commandeFournisseur));
     }
 
+    /**
+     * recuperer tous les ligne de commades par id de la commande
+     * @param idCommande
+     * @return
+     */
     @GetMapping( "/lignesCommande/{idCommande}")
     List<LigneCommadeFournisseurDto> findAllLignesCommandesFournisseurByCommandeFournisseurId(@PathVariable("idCommande") Integer idCommande){
       List <LigneCommandeFournisseur> liste =  commandeFournisseurService.findAllLignesCommandesFournisseurByCommandeFournisseurId(idCommande);
@@ -109,12 +113,19 @@ public class CommandeFournisseurController {
       return dtoList;
     };
 
+    /**
+     * recupirer les commades par les parametres
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/commandes")
-    public Page<CommandeFournisseurDto> getcommandes(@RequestParam Optional<String> name,
+    public Page<CommandeFournisseurDto> getcommandes(@RequestParam(defaultValue = "",required = false,name = "nom") String name,
                                             @RequestParam Optional<Integer> page,
                                             @RequestParam Optional<Integer> size){
 
-        Page<CommandeFournisseur>   commandeFournisseurPage  =   this.commandeFournisseurService.getcommandes(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<CommandeFournisseur>   commandeFournisseurPage  =   this.commandeFournisseurService.getcommandes(name,page.orElse(0),size.orElse(10));
 
         Page<CommandeFournisseurDto> commandeFournisseurDtoPage =commandeFournisseurPage.map(fournisseur -> {
             CommandeFournisseurDto commandeFournisseurDto =new CommandeFournisseurDto(fournisseur);

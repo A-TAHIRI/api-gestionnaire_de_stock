@@ -25,13 +25,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class AuthentificationController {
 
     @Autowired
@@ -57,12 +58,12 @@ private  RoleService roleService;
         // 1- vérifier le login
         Utilisateur userDetails = (Utilisateur) applicationUserDetailService.loadUserByUsername(authRequestDto.getEmail()); // il va me retourner l'utilisateur
         if (userDetails == null) { // l'utilisateur n'existe pas
-            throw new WsException(HttpStatus.NOT_FOUND, "Le mot de passe ou ...");
+            throw new WsException(HttpStatus.NOT_FOUND, "Le mot de passe ou l'Eamil invalid ");
         }
 
         // 2- Vérifier le mdp
         if (!passwordEncoder.matches(authRequestDto.getMdp(), userDetails.getMdp())){
-            throw new WsException(HttpStatus.NOT_FOUND, "Le mot de passe ou ...");
+            throw new WsException(HttpStatus.NOT_FOUND, "Le mot de passe ou l' Email invalid");
         }
 
         // 3- générer le token
@@ -124,12 +125,10 @@ private  RoleService roleService;
                 throw new InvalidEntityException("Un autre utilisateur avec le meme email existe deja", ErrorCodes.UTILISATEUR_ALREADY_EXISTS,
                         Collections.singletonList("Un autre utilisateur avec le meme email existe deja dans la BDD"));
             }
-
         }
 
-        // l'ensemble des vérif => nom > 3 caract le mdp sup à 8 caract avec du majuscule ou minuscule
-
         utilisateur.setRoles( List.of(roleService.addRole("USER"))) ;
+
         utilisateur.setToken(TokenManager.generateToken(applicationUserDetailService));
 
 

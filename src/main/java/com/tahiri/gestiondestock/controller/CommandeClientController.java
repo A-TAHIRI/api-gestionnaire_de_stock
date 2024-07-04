@@ -22,7 +22,6 @@ import static com.tahiri.gestiondestock.utils.constant.COMMANDE_CLIENT_ENDPOINT;
 
 @RestController
 @RequestMapping(COMMANDE_CLIENT_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class CommandeClientController {
 
     @Autowired
@@ -70,7 +69,10 @@ public class CommandeClientController {
         return new CommandeClientDto(commandeClientService.save(commandeClient));
     }
 
-
+    /**
+     * supprimer une commande
+     * @param id
+     */
     @DeleteMapping("/{id}")
     public void supprimer(@PathVariable Integer id) {
         commandeClientService.delete(id);
@@ -96,6 +98,11 @@ public class CommandeClientController {
         return new CommandeClientDto(commandeClientService.save(commandeClient));
     }
 
+    /**
+     * retourne  les ligneCommade par id de la commade
+     * @param idCommande
+     * @return
+     */
     @GetMapping("/lignesCommande/{idCommande}")
     List<LigneCommadeClientDto> findAllLignesCommandesClientByCommandeFournisseurId(@PathVariable("idCommande") Integer idCommande) {
         List<LigneCommandeClient> liste = commandeClientService.findAllLignesCommandesByCommandeClient(idCommande);
@@ -107,14 +114,20 @@ public class CommandeClientController {
         return dtoList;
     }
 
-    ;
+    /**
+     * recuppirer les commade par les parametre
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
 
     @GetMapping("/commandes")
-    public Page<CommandeClientDto> getcommades(@RequestParam Optional<String> name,
+    public Page<CommandeClientDto> getcommades(@RequestParam(defaultValue = "",required = false,name = "nom") String name,
                                                @RequestParam Optional<Integer> page,
                                                @RequestParam Optional<Integer> size) {
 
-        Page<CommandeClient> commandeClientPage = this.commandeClientService.getcommandes(name.orElse(""), page.orElse(0), size.orElse(10));
+        Page<CommandeClient> commandeClientPage = this.commandeClientService.getcommandes(name, page.orElse(0), size.orElse(10));
 
         Page<CommandeClientDto> commandeClientDtoPage = commandeClientPage.map(client -> {
             CommandeClientDto commandeClientDto = new CommandeClientDto(client);

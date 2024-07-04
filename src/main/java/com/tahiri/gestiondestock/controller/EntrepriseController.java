@@ -18,7 +18,6 @@ import static com.tahiri.gestiondestock.utils.constant.ENTREPRISE_ENDPOINT;
 
 @RestController
 @RequestMapping(ENTREPRISE_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class EntrepriseController {
     @Autowired
     private EntrepriseService entrepriseService;

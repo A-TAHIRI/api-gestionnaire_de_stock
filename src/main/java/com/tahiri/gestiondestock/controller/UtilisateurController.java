@@ -25,19 +25,25 @@ import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(UTILISATEUR_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200", "https://monsite.fr"})
 
 public class UtilisateurController {
     @Autowired
     private UtilisateurService utilisateurService;
-
     @Autowired
     private RoleService roleService;
-
     @Autowired
     private RolesRepository rolesRepository;
 
+    /**
+     * enregistrer un utilisateur dans la bdd
+     *
+     * @param utilisateur
+     * @return
+     */
+    @PostMapping("/api/v1/utilisateurs")
+    public Utilisateur enregistrer(@RequestBody Utilisateur utilisateur) {
+        return utilisateurService.save(utilisateur);
+    }
 
 
     /**
@@ -63,7 +69,7 @@ public class UtilisateurController {
      * @param id
      * @return un utilisateur
      */
-    @GetMapping("/{id}")
+    @GetMapping("/api/v1/utilisateurs/{id}")
     public UtilisateurDto unUtilisateur(@PathVariable Integer id) {
         return new UtilisateurDto(utilisateurService.getById(id));
     }
@@ -82,18 +88,6 @@ public class UtilisateurController {
     */
 
 
-    /**
-     * enregistrer un utilisateur dans la bdd
-     *
-     * @param utilisateur
-     * @return
-     */
-    @PostMapping("")
-    public Utilisateur enregistrer(@RequestBody Utilisateur utilisateur) {
-
-        return utilisateurService.save(utilisateur);
-
-    }
 
 
     /**
@@ -102,7 +96,7 @@ public class UtilisateurController {
      * @param id
      */
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/v1/utilisateurs/{id}")
     public void supprimer(@PathVariable Integer id) {
         utilisateurService.delete(id);
 
@@ -115,7 +109,7 @@ public class UtilisateurController {
      * @param utilisateur
      * @return
      */
-    @PutMapping("/{id}")
+    @PutMapping("/api/v1/utilisateurs/{id}")
     public UtilisateurDto modifier(@PathVariable Integer id, @RequestBody Utilisateur utilisateur) {
         Utilisateur old = utilisateurService.getById(id);
         if (old != null) {
@@ -179,12 +173,12 @@ public class UtilisateurController {
      * @param size
      * @return
      */
-    @GetMapping("")
-    public Page<UtilisateurDto> getUsers(@RequestParam Optional<String> name,
+    @GetMapping("/api/v1/utilisateurs")
+    public Page<UtilisateurDto> getUsers(@RequestParam(defaultValue = "",required = false,name = "nom") String name,
                                       @RequestParam Optional<Integer> page,
                                       @RequestParam Optional<Integer> size){
 
-       Page<Utilisateur>   utilisateurPage  =   this.utilisateurService.getUsers(name.orElse(""),page.orElse(0),size.orElse(10));
+       Page<Utilisateur>   utilisateurPage  =   this.utilisateurService.getUsers(name,page.orElse(0),size.orElse(10));
 
        Page<UtilisateurDto> utilisateurDtoPage =utilisateurPage.map(utilisateur -> {
            UtilisateurDto utilisateurDto =new UtilisateurDto(utilisateur);
@@ -199,7 +193,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/bymonth")
+    @GetMapping("/api/v1/utilisateurs/bymonth")
     public int getByMonth(){
         return utilisateurService.countUtilisateurBymouth();
     }
@@ -208,7 +202,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/bythismonth")
+    @GetMapping("/api/v1/utilisateurs/bythismonth")
     public int getByThisMonth(){
         return utilisateurService.countUtilisateurByThisMouth();
     }
@@ -218,7 +212,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/byyear")
+    @GetMapping("/api/v1/utilisateurs/byyear")
     public int getByYear(){
         return utilisateurService.countUtilisateurByYear();
     }
@@ -227,7 +221,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/bylastyear")
+    @GetMapping("/api/v1/utilisateurs/bylastyear")
     public int getByLastYear(){
         return utilisateurService.countUtilisateurByLastYear();
     }
@@ -238,7 +232,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/byday")
+    @GetMapping("/api/v1/utilisateurs/byday")
     public int getByDay(){
         return utilisateurService.countUtilisateurByDay();
     }
@@ -247,7 +241,7 @@ public class UtilisateurController {
      * @return
      */
 
-    @GetMapping("/bylastday")
+    @GetMapping("/api/v1/utilisateurs/bylastday")
     public int getByLastDay(){
         return utilisateurService.countUtilisateurByLastDay();
     }

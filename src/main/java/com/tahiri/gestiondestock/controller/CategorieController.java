@@ -18,7 +18,7 @@ import static com.tahiri.gestiondestock.utils.constant.CATEGORIE_ENDPOINT;
 
 @RestController
 @RequestMapping(CATEGORIE_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
+
 public class CategorieController {
     @Autowired
     private CategorieService categorieService;
@@ -94,11 +94,11 @@ public class CategorieController {
     }
 
     @GetMapping("/cate")
-    public Page<CategorieDto> getCategories(@RequestParam Optional<String> name,
+    public Page<CategorieDto> getCategories(@RequestParam(defaultValue = "", required = false, name = "nom") String name,
                                          @RequestParam Optional<Integer> page,
                                          @RequestParam Optional<Integer> size){
 
-        Page<Categorie>   categoriePage  =   this.categorieService.getCategories(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<Categorie>   categoriePage  =   this.categorieService.getCategories(name,page.orElse(0),size.orElse(10));
 
         Page<CategorieDto> categorieDtoPage =categoriePage.map(categorie -> {
             CategorieDto categorieDto =new CategorieDto(categorie);

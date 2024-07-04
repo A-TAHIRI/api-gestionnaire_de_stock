@@ -1,5 +1,4 @@
 package com.tahiri.gestiondestock.controller;
-
 import com.tahiri.gestiondestock.dto.ArticleDto;
 import com.tahiri.gestiondestock.dto.CategorieDto;
 import com.tahiri.gestiondestock.exception.WsException;
@@ -16,15 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.tahiri.gestiondestock.utils.constant.ARTICLE_ENDPOINT;
-
-
 @RestController
 @RequestMapping(ARTICLE_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr","http://localhost:56678"})
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
-
     /**
      * method pour récupirer tous les articles
      * @return une liste des articles
@@ -38,9 +33,6 @@ public class ArticleController {
         }
         return articleDtos;
     }
-
-
-
     /**
      * method pour recupirer un article
      * @param id
@@ -51,8 +43,6 @@ public class ArticleController {
         return  new ArticleDto(articleService.getById(id));
 
     }
-
-
     /**
      * method pour ajouter un article
      * @param article
@@ -62,7 +52,6 @@ public class ArticleController {
     public  ArticleDto enregister(@RequestBody Article article ){
         return new ArticleDto(articleService.save(article));
     }
-
     /**
      * method pour supprimer l'article de l'id
      * @param id
@@ -71,8 +60,6 @@ public class ArticleController {
     public  void  supprimer(@PathVariable Integer id){
         articleService.delete(id);
     }
-
-
     /**
      * method pour modifier l'article de l'id
      * @param id
@@ -89,18 +76,28 @@ public class ArticleController {
             return  new ArticleDto(article);
         }
     }
-
+    /**
+     * Methode qui retourn l'article par son code
+     * @param codeArticle
+     * @return
+     */
     @GetMapping("/filter/{codeArticle}")
    public ArticleDto getArticleByCode(@PathVariable String codeArticle){
         return new ArticleDto(articleService.finByCodeArticle(codeArticle)) ;
     }
-
+    /**
+     * Methode qui retourn les article par page, et par recherche
+     * @param name
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/articles")
-    public Page<ArticleDto> getArticles(@RequestParam Optional<String> name,
+    public Page<ArticleDto> getArticles(@RequestParam( defaultValue = "", required = false , name = "nom") String name,
                                             @RequestParam Optional<Integer> page,
                                             @RequestParam Optional<Integer> size){
 
-        Page<Article>   articlePage  =   this.articleService.getArticles(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<Article>   articlePage  =   this.articleService.getArticles(name,page.orElse(0),size.orElse(10));
 
         Page<ArticleDto> articleDtoPage =articlePage.map(article -> {
             ArticleDto articleDto =new ArticleDto(article);
@@ -109,6 +106,4 @@ public class ArticleController {
         return articleDtoPage;
 
     }
-
-
 }

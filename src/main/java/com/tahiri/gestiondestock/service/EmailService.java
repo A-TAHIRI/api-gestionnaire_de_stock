@@ -95,7 +95,7 @@ public class EmailService {
                     `
                                 <div>
                                     <p>Vous avez demandé la réinitialisation de votre mot de passe. Veuillez cliquer sur le lien ci-dessous pour procéder à la réinitialisation :</p>
-                                    <a href="http://localhost:4200/reset-password?token=%s">Réinitialiser le mot de passe</a>
+                                    <a href="https://gestostock.fr/reset-password?token=%s">Réinitialiser le mot de passe</a>
                                 </div>
                             `
                     """.formatted(token), true);
@@ -167,11 +167,6 @@ public class EmailService {
             }else{
                 throw new Exception("Aucun utilisateur trouvé avec le token spécifié");
             }
-
-
-
-
-
 
     }
 

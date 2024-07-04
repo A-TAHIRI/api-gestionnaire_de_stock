@@ -20,7 +20,6 @@ import static com.tahiri.gestiondestock.utils.constant.MVTSTK_ENOINT;
 
 @RestController
 @RequestMapping(MVTSTK_ENOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class MvtStkController {
 
 
@@ -98,11 +97,11 @@ public class MvtStkController {
 
 
     @GetMapping("/mvtstkcontaining")
-    public Page<MvtStkDto> getmvtskbyarticle(@RequestParam Optional<String> name,
+    public Page<MvtStkDto> getmvtskbyarticle(@RequestParam(defaultValue = "",required = false,name = "nom") String name,
                                          @RequestParam Optional<Integer> page,
                                          @RequestParam Optional<Integer> size){
 
-        Page<MvtStk>   mvtStkPage  =   this.mvtStkService.getmvtstkbyarticle(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<MvtStk>   mvtStkPage  =   this.mvtStkService.getmvtstkbyarticle(name,page.orElse(0),size.orElse(10));
 
         Page<MvtStkDto> mvtStkDtoPage =mvtStkPage.map(mvtStk -> {
             MvtStkDto mvtStkDto =new MvtStkDto(mvtStk);

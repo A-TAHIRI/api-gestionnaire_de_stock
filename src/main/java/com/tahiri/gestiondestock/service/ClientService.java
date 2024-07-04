@@ -39,7 +39,6 @@ public class ClientService {
             log.error("Client is not valid {}", client);
             throw new InvalidEntityException("Le client n'est pas valide", ErrorCodes.CLIENT_NOT_VALID, errors);
         }
-
         return clientRepository.save(client);
     }
 

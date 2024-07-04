@@ -47,9 +47,7 @@ public class CommandeFournisseur extends AbstractEntity{
         return EtatCommande.LIVREE.equals(this.etatCommande);
     }
 
-    public boolean hasIdentreprise() {
-        return idEntreprise != null ;
-    }
+
 
 
 

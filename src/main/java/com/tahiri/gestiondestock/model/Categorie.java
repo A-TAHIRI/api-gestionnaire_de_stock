@@ -2,10 +2,7 @@ package com.tahiri.gestiondestock.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -19,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "Categorie")
 public class Categorie extends  AbstractEntity {
+
 
     @Column(name = "code")
     private  String code;

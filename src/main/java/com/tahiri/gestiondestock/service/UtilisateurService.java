@@ -6,6 +6,7 @@ import com.tahiri.gestiondestock.exception.EntityNotFoundException;
 import com.tahiri.gestiondestock.exception.ErrorCodes;
 import com.tahiri.gestiondestock.exception.InvalidEntityException;
 import com.tahiri.gestiondestock.exception.InvalidOperationException;
+import com.tahiri.gestiondestock.manager.TokenManager;
 import com.tahiri.gestiondestock.model.Utilisateur;
 import com.tahiri.gestiondestock.repository.UtilisateurRepository;
 import com.tahiri.gestiondestock.validator.UtilisateurValidator;
@@ -35,6 +36,15 @@ public class UtilisateurService{
     private UtilisateurRepository utilisateurRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private  RoleService roleService;
+
+    @Autowired
+    private ApplicationUserDetailService applicationUserDetailService;
+
+
     String identreprise = MDC.get("idEntreprise");
 
     public Utilisateur save(Utilisateur utilisateur) {
@@ -47,18 +57,19 @@ public class UtilisateurService{
         if(!utilisateur.getEmail().contains("@")) {
             throw  new RuntimeException("Votre mail invalide");
         }
-        if(!utilisateur.getEmail().contains(".")) {
-            throw  new RuntimeException("Votre mail invalide");
+
+        if(utilisateur.getMdp().isEmpty() ||utilisateur.getMdp().length() < 6) {
+            throw  new RuntimeException("Le mot de passe doit avoir au moins 6 caractères");
         }
-        if (!(StringUtils.hasLength(utilisateur.getMdp()) && utilisateur.getMdp().length() >= 8)) {
-            throw new RuntimeException("Votre mot de passe doit contenir au moins 8 caractères");
-        }
-        // Vérifier si le mot de passe contient au moins un caractère majuscule et au moins un caractère spécial
-        if (!Pattern.compile("(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).*$").matcher(utilisateur.getMdp()).find()) {
-            throw new RuntimeException("Votre mot de passe doit contenir au moins une lettre majuscule et au moins un caractère spécial");
+         String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>])(?=.*\\d)(?!.*\\s).{6,}$";
+
+        if (!utilisateur.getMdp().matches(PASSWORD_PATTERN)) {
+            throw new RuntimeException("Le mot de passe doit contenir au moins une lettre majuscule, un caractère spécial, un chiffre et avoir au moins 6 caractères");
         }
 
+
         utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
+
         return
                 utilisateurRepository.save(utilisateur);
     }
@@ -103,14 +114,15 @@ public class UtilisateurService{
 
     public Utilisateur changerMotDePasse(ChangerMotDePasseUtilisateurDto dto) {
         validate(dto);
-
+/*
         Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(dto.getId());
         if (utilisateurOptional.isEmpty()) {
             log.warn("Aucun utilisateur n'a ete trouve avec l'ID " + dto.getId());
             throw new EntityNotFoundException("Aucun utilisateur n'a ete trouve avec l'ID " + dto.getId(), ErrorCodes.UTILISATEUR_NOT_FOUND);
         }
-
-        Utilisateur utilisateur = utilisateurOptional.get();
+*/
+        Utilisateur utilisateur = utilisateurRepository.findById(dto.getId()).orElseThrow(()->new EntityNotFoundException("Aucun utilasateur avec l'ID = " + dto.getId() + " n' ete trouve dans la BDD",
+                ErrorCodes.UTILISATEUR_NOT_FOUND));
         utilisateur.setMdp(passwordEncoder.encode(dto.getMotDePasse()));
 
         return

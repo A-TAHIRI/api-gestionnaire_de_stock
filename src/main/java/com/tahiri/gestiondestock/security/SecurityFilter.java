@@ -64,8 +64,8 @@ public class SecurityFilter  extends OncePerRequestFilter {
 
         // Si `userConnect` n'est pas `null`, obtenir `idEntreprise` et le stocker dans le MDC
 
-        if (userConnect != null && userConnect.getEntreprise() != null) {
-            String email =userConnect.getEmail();
+        if ( userConnect.getEntreprise() != null) {
+           // String email =userConnect.getEmail();
             String idEntreprise = userConnect.getEntreprise().getId().toString();
             MDC.put("idEntreprise", idEntreprise);
         }else {

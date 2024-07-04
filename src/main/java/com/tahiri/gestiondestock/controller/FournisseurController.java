@@ -21,7 +21,6 @@ import static com.tahiri.gestiondestock.utils.constant.FOURNISSEUR_ENDPOINT;
 
 @RestController
 @RequestMapping(FOURNISSEUR_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
 public class FournisseurController {
     @Autowired
     private FournisseurService fournisseurService;
@@ -94,11 +93,11 @@ public class FournisseurController {
     }
 
     @GetMapping("/fournisseurs")
-    public Page<FournisseurDto> getUsers(@RequestParam Optional<String> name,
+    public Page<FournisseurDto> getUsers(@RequestParam(defaultValue ="",required = false,name = "nom") String name,
                                          @RequestParam Optional<Integer> page,
                                          @RequestParam Optional<Integer> size){
 
-        Page<Fournisseur>   fournisseurPage  =   this.fournisseurService.getfournisseur(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<Fournisseur>   fournisseurPage  =   this.fournisseurService.getfournisseur(name,page.orElse(0),size.orElse(10));
 
         Page<FournisseurDto> fournisseurDtoPage =fournisseurPage.map(fournisseur -> {
             FournisseurDto fournisseurDto =new FournisseurDto(fournisseur);

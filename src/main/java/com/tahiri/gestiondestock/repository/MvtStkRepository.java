@@ -21,11 +21,20 @@ public interface MvtStkRepository  extends JpaRepository<MvtStk ,Integer> {
 
     List<MvtStk> findByArticle_Id(Integer id);
 
-    @Query("SELECT m FROM MvtStk m GROUP BY m.article.id")
+    @Query("SELECT  m FROM MvtStk m GROUP BY m.article.id")
     List<MvtStk> findAllGroupByIdArticle();
 
+    /*
 
-    @Query("SELECT DISTINCT m FROM MvtStk m WHERE m.article.designation LIKE %:name% AND m.idEntreprise = :identreprise GROUP BY m.article.id")
+    @Query("SELECT m FROM MvtStk m WHERE m.article.designation LIKE %:name% AND m.idEntreprise = :identreprise GROUP BY m.article.id, m.article.designation, m.createDate, m.lastModifiedDate, m.dateMvt,m.id, m.quantite, m.typeMvt")
+    Page<MvtStk> findAllGroupByIdArticleContainingAndIdEntreprise(@Param("name") String name,@Param("identreprise") Integer identreprise,  Pageable pageable);
+*/
+/*
+    @Query("SELECT m FROM MvtStk m WHERE m.id IN (SELECT MIN(m2.id) FROM MvtStk m2 WHERE m2.article.designation LIKE %:name% AND m2.idEntreprise = :identreprise GROUP BY m2.article.id)")
+    Page<MvtStk> findAllGroupByIdArticleContainingAndIdEntreprise(@Param("name") String name, @Param("identreprise") Integer identreprise, Pageable pageable);
+*/
+
+    @Query("SELECT m FROM MvtStk m WHERE m.article.designation LIKE %:name% AND m.idEntreprise = :identreprise GROUP BY m.article.id, m.article.designation")
     Page<MvtStk> findAllGroupByIdArticleContainingAndIdEntreprise(@Param("name") String name,@Param("identreprise") Integer identreprise,  Pageable pageable);
 
     MvtStk findByIdLignefrsclt(Integer idLignefrsclt);

@@ -23,7 +23,7 @@ import static com.tahiri.gestiondestock.utils.constant.CLIENT_ENDPOINT;
 
 @RestController
 @RequestMapping(CLIENT_ENDPOINT)
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr"})
+
 @Slf4j
 public class ClientController {
     @Autowired
@@ -100,11 +100,11 @@ public class ClientController {
 
 
     @GetMapping("/clients")
-    public Page<ClientDto> getUsers(@RequestParam Optional<String> name,
+    public Page<ClientDto> getUsers(@RequestParam(defaultValue = "",required = false,name = "nom") String name,
                                          @RequestParam Optional<Integer> page,
                                          @RequestParam Optional<Integer> size){
 
-        Page<Client>   clientPage  =   this.clientService.getclients(name.orElse(""),page.orElse(0),size.orElse(10));
+        Page<Client>   clientPage  =   this.clientService.getclients(name,page.orElse(0),size.orElse(10));
 
         Page<ClientDto> clientDtoPage =clientPage.map(client -> {
             ClientDto clientDto =new ClientDto(client);

@@ -13,7 +13,6 @@ import static com.tahiri.gestiondestock.utils.constant.ARTICLE_ENDPOINT;
 
 @RestController
 @RequestMapping("/contact")
-@CrossOrigin(origins = {"http://localhost:4200","https://monsite.fr","http://localhost:56678"})
 public class ContactController {
 
 
